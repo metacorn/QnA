@@ -3,6 +3,7 @@ class Question < ApplicationRecord
 
   validates :title, presence: true,
                     length: { in: 15..75 }
-  validates :body, presence: true
+  validates :body,  presence: true,
+                    length: { in: 50..500 }
 
 end
