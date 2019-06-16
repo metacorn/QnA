@@ -110,4 +110,16 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:question1) { create(:question1) }
+
+    it 'deletes the question' do
+      expect { delete :destroy, params: { id: question1 } }.to change(Question, :count).by(-1)
+    end
+    it 'redirects to index' do
+      delete :destroy, params: { id: question1 }
+      expect(response).to redirect_to questions_path
+    end
+  end
 end

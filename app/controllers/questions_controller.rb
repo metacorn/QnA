@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
 
-  before_action :set_question, only: %i[show edit update]
+  before_action :set_question, only: %i[show edit update destroy]
 
   def index
     @questions = Question.all
@@ -32,6 +32,11 @@ class QuestionsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @question.destroy
+    redirect_to questions_path
   end
 
   private
