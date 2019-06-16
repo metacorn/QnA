@@ -61,8 +61,20 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
     context 'with invalid attributes' do
-      it 'does not save a new question in the database'
-      it 're-renders new view'
+      it 'does not save a new question with short title in the database' do
+        expect { post :create, params: { question: attributes_for(:question1, :short_title) } }.to_not change(Question, :count)
+      end
+      it 'does not save a new question with long title in the database' do
+        expect { post :create, params: { question: attributes_for(:question1, :long_title) } }.to_not change(Question, :count)
+      end
+      it 'does not save a new question with not unique title in the database' do
+        post :create, params: { question: attributes_for(:question1) }
+        expect { post :create, params: { question: attributes_for(:question2, :the_same_title_as_of_the_first_question) } }.to_not change(Question, :count)
+      end
+      it 're-renders new view' do
+        post :create, params: { question: attributes_for(:question1, :short_title) }
+        expect(response).to render_template :new
+      end
     end
   end
 end
