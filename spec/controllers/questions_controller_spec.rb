@@ -77,4 +77,37 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    context 'with valid attributes' do
+      it 'assigns the requested question to @question' do
+        patch :update, params: { id: question1, question: attributes_for(:question1) }
+        expect(assigns(:question)).to eq question1
+      end
+      it 'changes question attributes' do
+        patch :update, params: { id: question1, question: { title: "New title for the first question", body: "#{"b" * 50}" } }
+        question1.reload
+
+        expect(question1.title).to eq("New title for the first question")
+        expect(question1.body).to eq("#{"b" * 50}")
+      end
+      it 'redirects to updated question' do
+        patch :update, params: { id: question1, question: attributes_for(:question1) }
+        expect(response).to redirect_to question1
+      end
+    end
+    context 'with invalid attributes' do
+      before { patch :update, params: { id: question1, question: attributes_for(:question1, :long_title) }
+ }
+
+      it 'does not change the question' do
+        question1.reload
+        expect(question1.title).to eq("Title of the first question")
+        expect(question1.body).to eq("#{"a" * 50}")
+      end
+      it 're-renders edit view' do
+        expect(response).to render_template :edit
+      end
+    end
+  end
 end
