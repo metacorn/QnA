@@ -5,6 +5,6 @@ class Question < ApplicationRecord
                     length: { in: 15..75 },
                     uniqueness: { case_sensitive: false }
   validates :body,  presence: true,
-                    length: { in: 50..500 }
+                    length: { minimum: 50 }
 
 end
