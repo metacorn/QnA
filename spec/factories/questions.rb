@@ -1,6 +1,10 @@
 FactoryBot.define do
-  factory :question do
-    title { "MyString" }
-    body { "MyText" }
+  factory :question1, :class => Question do
+    title { "Title of the first question" }
+    body { "#{"a" * 50}" }
+  end
+  factory :question2, :class => Question do
+    title { "Title of the second question" }
+    body { "#{"b" * 50}" }
   end
 end
