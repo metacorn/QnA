@@ -67,20 +67,11 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save a new question with short title in the database' do
-        expect { post :create, params: { question: attributes_for(:question1, :short_title) } }.to_not change(Question, :count)
+        expect { post :create, params: { question: attributes_for(:question1, :invalid) } }.to_not change(Question, :count)
       end
 
-      it 'does not save a new question with long title in the database' do
-        expect { post :create, params: { question: attributes_for(:question1, :long_title) } }.to_not change(Question, :count)
-      end
-
-      it 'does not save a new question with not unique title in the database' do
-        post :create, params: { question: attributes_for(:question1) }
-        expect { post :create, params: { question: attributes_for(:question2, :the_same_title_as_of_the_first_question) } }.to_not change(Question, :count)
-      end
-
-      it 're-renders new view' do
-        post :create, params: { question: attributes_for(:question1, :short_title) }
+      it 'renders new view' do
+        post :create, params: { question: attributes_for(:question1, :invalid) }
         expect(response).to render_template :new
       end
     end
@@ -107,7 +98,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
     context 'with invalid attributes' do
-      before { patch :update, params: { id: question1, question: attributes_for(:question1, :long_title) }
+      before { patch :update, params: { id: question1, question: attributes_for(:question1, :invalid) }
  }
 
       it 'does not change the question' do
@@ -116,7 +107,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question1.body).to eq("#{"a" * 50}")
       end
 
-      it 're-renders edit view' do
+      it 'renders edit view' do
         expect(response).to render_template :edit
       end
     end
