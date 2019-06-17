@@ -56,7 +56,9 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       it 'saves a new question in the database' do
-        expect { post :create, params: { question: attributes_for(:question1) } }.to change(Question, :count).by(1)
+        expect {
+          post :create, params: { question: attributes_for(:question1) }
+        }.to change(Question, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -68,7 +70,9 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save a new question with short title in the database' do
-        expect { post :create, params: { question: attributes_for(:question1, :invalid) } }.to_not change(Question, :count)
+        expect {
+          post :create, params: { question: attributes_for(:question1, :invalid) }
+        }.to_not change(Question, :count)
       end
 
       it 'renders new view' do
@@ -96,11 +100,9 @@ RSpec.describe QuestionsController, type: :controller do
     end
     context 'with invalid attributes' do
       it 'does not change the question' do
-        patch :update, params: { id: question1, question: attributes_for(:question1, :invalid) }
-        question1.reload
-
-        expect(question1.title).to eq("Title of the first question")
-        expect(question1.body).to eq("#{"a" * 50}")
+        expect {
+          patch :update, params: { id: question1, question: attributes_for(:question1, :invalid) }
+        }.to_not change { question1.reload.updated_at }
       end
 
       it 'renders edit view' do
@@ -115,7 +117,9 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:question1) { create(:question1) }
 
     it 'deletes the question' do
-      expect { delete :destroy, params: { id: question1 } }.to change(Question, :count).by(-1)
+      expect {
+        delete :destroy, params: { id: question1 }
+      }.to change(Question, :count).by(-1)
     end
 
     it 'redirects to index' do
