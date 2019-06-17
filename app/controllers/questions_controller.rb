@@ -1,5 +1,4 @@
 class QuestionsController < ApplicationController
-
   before_action :set_question, only: %i[show edit update destroy]
 
   def index
@@ -48,5 +47,4 @@ class QuestionsController < ApplicationController
   def question_params
     params.require(:question).permit(:title, :body)
   end
-
 end

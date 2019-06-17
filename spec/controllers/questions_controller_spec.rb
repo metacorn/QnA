@@ -23,6 +23,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question1
     end
+
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -34,6 +35,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'assigns a new question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
     end
+
     it 'renders new view' do
       expect(response).to render_template :new
     end
@@ -45,6 +47,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question1
     end
+
     it 'renders edit view' do
       expect(response).to render_template :edit
     end
@@ -55,22 +58,27 @@ RSpec.describe QuestionsController, type: :controller do
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question1) } }.to change(Question, :count).by(1)
       end
+
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question1) }
         expect(response).to redirect_to assigns(:question)
       end
     end
+
     context 'with invalid attributes' do
       it 'does not save a new question with short title in the database' do
         expect { post :create, params: { question: attributes_for(:question1, :short_title) } }.to_not change(Question, :count)
       end
+
       it 'does not save a new question with long title in the database' do
         expect { post :create, params: { question: attributes_for(:question1, :long_title) } }.to_not change(Question, :count)
       end
+
       it 'does not save a new question with not unique title in the database' do
         post :create, params: { question: attributes_for(:question1) }
         expect { post :create, params: { question: attributes_for(:question2, :the_same_title_as_of_the_first_question) } }.to_not change(Question, :count)
       end
+
       it 're-renders new view' do
         post :create, params: { question: attributes_for(:question1, :short_title) }
         expect(response).to render_template :new
@@ -84,6 +92,7 @@ RSpec.describe QuestionsController, type: :controller do
         patch :update, params: { id: question1, question: attributes_for(:question1) }
         expect(assigns(:question)).to eq question1
       end
+
       it 'changes question attributes' do
         patch :update, params: { id: question1, question: { title: "New title for the first question", body: "#{"b" * 50}" } }
         question1.reload
@@ -91,6 +100,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question1.title).to eq("New title for the first question")
         expect(question1.body).to eq("#{"b" * 50}")
       end
+
       it 'redirects to updated question' do
         patch :update, params: { id: question1, question: attributes_for(:question1) }
         expect(response).to redirect_to question1
@@ -105,6 +115,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question1.title).to eq("Title of the first question")
         expect(question1.body).to eq("#{"a" * 50}")
       end
+
       it 're-renders edit view' do
         expect(response).to render_template :edit
       end
@@ -117,6 +128,7 @@ RSpec.describe QuestionsController, type: :controller do
     it 'deletes the question' do
       expect { delete :destroy, params: { id: question1 } }.to change(Question, :count).by(-1)
     end
+
     it 'redirects to index' do
       delete :destroy, params: { id: question1 }
       expect(response).to redirect_to questions_path

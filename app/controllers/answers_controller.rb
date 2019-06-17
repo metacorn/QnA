@@ -1,5 +1,4 @@
 class AnswersController < ApplicationController
-
   def new
     @answer = Answer.new
   end
@@ -7,6 +6,7 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
+
     if @answer.save
       redirect_to @question
     else
@@ -19,5 +19,4 @@ class AnswersController < ApplicationController
   def answer_params
     params.require(:answer).permit(:body)
   end
-
 end
