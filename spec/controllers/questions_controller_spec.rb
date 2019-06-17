@@ -61,6 +61,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to show view' do
         post :create, params: { question: attributes_for(:question1) }
+
         expect(response).to redirect_to assigns(:question)
       end
     end
@@ -89,20 +90,22 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to updated question' do
         patch :update, params: { id: question1, question: attributes_for(:question1) }
+
         expect(response).to redirect_to question1
       end
     end
     context 'with invalid attributes' do
-      before { patch :update, params: { id: question1, question: attributes_for(:question1, :invalid) }
- }
-
       it 'does not change the question' do
+        patch :update, params: { id: question1, question: attributes_for(:question1, :invalid) }
         question1.reload
+
         expect(question1.title).to eq("Title of the first question")
         expect(question1.body).to eq("#{"a" * 50}")
       end
 
       it 'renders edit view' do
+        patch :update, params: { id: question1, question: attributes_for(:question1, :invalid) }
+
         expect(response).to render_template :edit
       end
     end
@@ -117,6 +120,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'redirects to index' do
       delete :destroy, params: { id: question1 }
+
       expect(response).to redirect_to questions_path
     end
   end
