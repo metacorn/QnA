@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :answer do
-    body { "MyText" }
+    body { "#{"b" * 50}" }
   end
 end
