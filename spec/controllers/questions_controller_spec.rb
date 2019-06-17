@@ -79,11 +79,6 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     context 'with valid attributes' do
-      it 'assigns the requested question to @question' do
-        patch :update, params: { id: question1, question: attributes_for(:question1) }
-        expect(assigns(:question)).to eq question1
-      end
-
       it 'changes question attributes' do
         patch :update, params: { id: question1, question: { title: "New title for the first question", body: "#{"b" * 50}" } }
         question1.reload
