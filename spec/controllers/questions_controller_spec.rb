@@ -69,7 +69,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalid attributes' do
-      it 'does not save a new question with short title in the database' do
+      it 'does not save a new question in the database' do
         expect {
           post :create, params: { question: attributes_for(:question, :invalid) }
         }.to_not change(Question, :count)
