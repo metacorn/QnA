@@ -1,5 +1,9 @@
 FactoryBot.define do
   factory :answer do
-    body { "MyText" }
+    body { "#{"b" * 50}" }
+
+    trait :invalid do
+      body { "#{"b" * 49}" }
+    end
   end
 end
