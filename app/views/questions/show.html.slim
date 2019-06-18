@@ -1,3 +1,4 @@
+=render 'manage_question_links' if @question.user == current_user
 h4= @question.title
 p= @question.body
 p Answers
