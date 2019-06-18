@@ -26,5 +26,11 @@ feature 'user can create question', %q{
   end
 
   scenario 'authenticated user asks a question with errors'
-  scenario 'unauthenticated user tries to ask a question'
+
+  scenario 'unauthenticated user tries to ask a question' do
+    visit questions_path
+    click_on 'Ask a question'
+
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  end
 end
