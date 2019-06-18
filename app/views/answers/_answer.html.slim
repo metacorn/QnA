@@ -1,1 +1,2 @@
 p= answer.body
+p= render(partial: 'manage_answer_links', locals: { answer: answer }) if answer.user == current_user

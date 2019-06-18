@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :answer do
     body { "#{"b" * 50}" }
+    question
     user
 
     trait :invalid do

@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'byebug'
 
 RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
@@ -40,6 +41,24 @@ RSpec.describe AnswersController, type: :controller do
         post :create, params: { question_id: question.id, answer: attributes_for(:answer, :invalid) }
         expect(response).to redirect_to question
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before { login(user) }
+    let(:question) { create(:question, user: user) }
+    let!(:answer) { create(:answer, question: question, user: user) }
+
+    it 'deletes the answer' do
+      expect {
+        delete :destroy, params: { id: answer }
+      }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to Question show view' do
+      delete :destroy, params: { id: answer }
+
+      expect(response).to redirect_to question
     end
   end
 end
