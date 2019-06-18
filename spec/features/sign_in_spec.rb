@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'user can sign in', %q{
   in order to ask questions
-  as an unauthenticated user
+  as an authenticated user
   i'd like to be able to sign in
 } do
   given(:user) { create(:user) }
