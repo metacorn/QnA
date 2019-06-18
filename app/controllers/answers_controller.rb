@@ -8,9 +8,9 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
 
     if @answer.save
-      redirect_to @question
+      redirect_to @question, notice: "Your answer was saved."
     else
-      render :new
+      redirect_to @question, alert: "Your answer was not saved."
     end
   end
 

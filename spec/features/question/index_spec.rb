@@ -5,6 +5,8 @@ feature 'user can see a list of questions', %q{
   as a site visitor
   i'd like to see a list of all questions
 } do
+  before { FactoryBot.reload }
+
   given!(:questions) { create_list(:question, 5) }
 
   scenario 'visitor sees a list of questions' do
