@@ -5,27 +5,32 @@ feature 'user can create question', %q{
   as an authenticated user
   i'd like to be able to ask the question
 } do
-  given(:user) { User.create!(email: 'user@test.com', password: '12345678') }
+  given(:user) { create(:user) }
 
-  scenario 'authenticated user asks a question' do
-    visit new_user_session_path
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_on 'Log in'
+  describe 'authenticated user' do
+    background do
+      login(user)
 
-    visit questions_path
-    click_on 'Ask a question'
+      visit questions_path
+      click_on 'Ask a question'
+    end
 
-    fill_in 'Title', with: 'Test question title'
-    fill_in 'Body', with: "#{"body" * 25}"
-    click_on 'Ask'
+    scenario 'asks a question' do
+      fill_in 'Title', with: 'Test question title'
+      fill_in 'Body', with: "#{"body" * 25}"
+      click_on 'Ask'
 
-    expect(page).to have_content 'Your question was successfully created.'
-    expect(page).to have_content 'Test question title'
-    expect(page).to have_content "#{"body" * 25}"
+      expect(page).to have_content 'Your question was successfully created.'
+      expect(page).to have_content 'Test question title'
+      expect(page).to have_content "#{"body" * 25}"
+    end
+
+    scenario 'asks a question with errors' do
+      click_on 'Ask'
+
+      expect(page).to have_content "Title can't be blank"
+    end
   end
-
-  scenario 'authenticated user asks a question with errors'
 
   scenario 'unauthenticated user tries to ask a question' do
     visit questions_path
