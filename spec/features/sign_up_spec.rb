@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'user can sign up', %q{
   in order to ask questions
-  as an unauthenticated user
+  as an authenticated user
   i'd like to be able to sign up
 } do
   background { visit new_user_registration_path }
