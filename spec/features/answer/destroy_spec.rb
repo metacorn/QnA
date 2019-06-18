@@ -21,6 +21,7 @@ feature "user can delete his answers but not another's", %q{
 
     expect(page).to have_content "Your answer was successfully deleted!"
   end
+
   scenario "user tries to delete another's answer" do
     create(:answer, question: question, user: user2)
 
