@@ -52,20 +52,28 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
     let(:question) { create(:question, user: user) }
     let!(:answer) { create(:answer, question: question, user: user) }
+    let(:user2) { create(:user) }
+    let!(:answer2) { create(:answer, question: question, user: user2) }
+
+    before { login(user) }
 
     it 'deletes the answer' do
       expect {
         delete :destroy, params: { id: answer }
       }.to change(Answer, :count).by(-1)
+      expect { answer.reload }.to raise_error ActiveRecord::RecordNotFound
     end
 
     it 'redirects to Question show view' do
       delete :destroy, params: { id: answer }
 
       expect(response).to redirect_to question
+    end
+
+    it "tries to delete another user's answer" do
+      expect { delete :destroy, params: { id: answer2 } }.to_not change(Answer, :count)
     end
   end
 end
