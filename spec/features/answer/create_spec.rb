@@ -46,6 +46,8 @@ feature 'only authenticated user can create answers', %q{
       click_on 'Leave'
 
       expect(page).to have_content 'Your answer was not saved.'
+      expect(page).to have_content "Body can't be blank."
+      expect(page).to have_content 'Body is too short (minimum is 50 characters).'
     end
   end
 
