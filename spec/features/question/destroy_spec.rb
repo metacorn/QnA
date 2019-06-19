@@ -17,6 +17,7 @@ feature "user can delete his questions but not another's", %q{
     click_on 'Delete the question'
 
     expect(page).to have_content "Your question was successfully deleted!"
+    expect { question1.reload }.to raise_error ActiveRecord::RecordNotFound
   end
 
   scenario "user tries to delete another's question" do
