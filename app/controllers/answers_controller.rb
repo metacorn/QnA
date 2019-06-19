@@ -13,6 +13,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question, notice: "Your answer was saved."
     else
+      session[:answer_errors] = @answer.errors.full_messages.join(". ") + "."
       redirect_to @question, alert: "Your answer was not saved."
     end
   end

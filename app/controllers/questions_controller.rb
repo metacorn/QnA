@@ -8,6 +8,8 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @answer_errors_msg = session[:answer_errors]
+    session.delete(:answer_errors)
   end
 
   def new
