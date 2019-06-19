@@ -6,7 +6,6 @@ FactoryBot.define do
   factory :question do
     title { generate :title }
     body { "#{"a" * 50}" }
-    user
 
     trait :invalid do
       title { "Title" }

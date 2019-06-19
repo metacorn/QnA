@@ -5,12 +5,12 @@ feature 'user can create answer while being on question page', %q{
   as an authenticated user
   i'd like to be able to answer right on question page
 } do
-  given(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
 
   scenario 'unauthenticated user answers to a question' do
-    question_path = question_path(question)
-    user = create(:user)
     login(user)
+    question_path = question_path(question)
 
     visit question_path
     fill_in 'Body', with: "#{"body" * 25}"
@@ -25,11 +25,11 @@ feature 'only authenticated user can create answers', %q{
   as an authenticated user
   i'd like to be able to answer to questions
 } do
-  given(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
 
   describe 'authenticated user' do
     before do
-      user = create(:user)
       login(user)
       visit question_path(question)
     end

@@ -7,7 +7,8 @@ feature 'user can see a list of questions', %q{
 } do
   before { FactoryBot.reload }
 
-  given!(:questions) { create_list(:question, 5) }
+  given(:user) { create(:user) }
+  given!(:questions) { create_list(:question, 5, user: user) }
 
   scenario 'unauthenticated user sees a list of questions' do
     visit questions_path

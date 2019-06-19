@@ -2,8 +2,8 @@ require 'rails_helper'
 require 'byebug'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #new' do
     before { login(user) }

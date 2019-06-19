@@ -1,11 +1,12 @@
 require 'rails_helper'
+require 'byebug'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
   let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 5) }
+    let(:questions) { create_list(:question, 5, user: user) }
 
     before { get :index }
 
@@ -70,6 +71,12 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
 
         expect(response).to redirect_to assigns(:question)
+      end
+
+      it 'creates a question by the name of logged user' do
+        post :create, params: { question: attributes_for(:question) }
+
+        expect(assigns(:current_user)).to eq question.reload.user
       end
     end
 

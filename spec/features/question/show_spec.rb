@@ -8,7 +8,8 @@ feature 'user can see a question and answers to it', %q{
   before { FactoryBot.reload }
   n = 5
 
-  given!(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
   given!(:answers) { create_list(:answer, n, question: question) }
 
   scenario 'unauthenticated user sees a question and answers' do
