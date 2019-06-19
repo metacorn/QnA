@@ -14,12 +14,13 @@ feature "user can delete his answers but not another's", %q{
   before { login(user1) }
 
   scenario 'user deletes his answer' do
-    create(:answer, question: question, user: user1)
+    answer = create(:answer, question: question, user: user1)
 
     visit question_path(question)
     click_on 'Delete the answer'
 
     expect(page).to have_content "Your answer was successfully deleted!"
+    expect { answer.reload }.to raise_error ActiveRecord::RecordNotFound
   end
 
   scenario "user tries to delete another's answer" do
