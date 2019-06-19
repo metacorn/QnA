@@ -15,7 +15,7 @@ feature 'user can see a question and answers to it', %q{
   scenario 'unauthenticated user sees a question and answers' do
     visit question_path(question)
 
-    expect(page).to have_content "#{"a" * 50}"
-    expect(page).to have_content "#{"b" * 50}", count: n
+    expect(page).to have_content question.title
+    expect(page).to have_content answers.sample.body, count: n
   end
 end

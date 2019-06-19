@@ -8,7 +8,7 @@ feature 'user can create answer while being on question page', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  scenario 'unauthenticated user answers to a question' do
+  scenario 'authenticated user answers to a question' do
     login(user)
     question_path = question_path(question)
 
@@ -39,6 +39,7 @@ feature 'only authenticated user can create answers', %q{
       click_on 'Leave'
 
       expect(page).to have_content 'Your answer was saved.'
+      expect(page).to have_content "#{"body" * 25}"
     end
 
     scenario 'answers to a question with errors' do
