@@ -18,12 +18,10 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
-    @question = @answer.question
-    if @answer.user == current_user
-      @answer.destroy
-      redirect_to @question, notice: "Your answer was successfully deleted!"
-    end
+    answer = Answer.find(params[:id])
+    return if non_owned?(answer)
+    answer.destroy
+    redirect_to answer.question, notice: "Your answer was successfully deleted!"
   end
 
   private

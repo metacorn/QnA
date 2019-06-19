@@ -28,7 +28,14 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirects to question show view' do
         post :create, params: { question_id: question.id, answer: attributes_for(:answer) }
+
         expect(response).to redirect_to question
+      end
+
+      it 'creates answer by the name of logged user' do
+        post :create, params: { question_id: question.id, answer: attributes_for(:answer) }
+
+        expect(assigns(:current_user)).to eq Answer.last.user
       end
     end
 
