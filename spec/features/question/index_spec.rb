@@ -6,17 +6,16 @@ feature 'user can see a list of questions', %q{
   i'd like to see a list of all questions
 } do
   before { FactoryBot.reload }
+  n = 5
 
   given(:user) { create(:user) }
-  given!(:questions) { create_list(:question, 5, user: user) }
+  given!(:questions) { create_list(:question, n, user: user) }
 
   scenario 'unauthenticated user sees a list of questions' do
     visit questions_path
 
-    expect(page).to have_content "Title of the question #1"
-    expect(page).to have_content "Title of the question #2"
-    expect(page).to have_content "Title of the question #3"
-    expect(page).to have_content "Title of the question #4"
-    expect(page).to have_content "Title of the question #5"
+    n.times do |index|
+      expect(page).to have_content "Title of the question ##{index + 1}"
+    end
   end
 end

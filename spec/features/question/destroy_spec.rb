@@ -23,6 +23,6 @@ feature "user can delete his questions but not another's", %q{
   scenario "user tries to delete another's question" do
     visit question_path(question2)
 
-    expect(page).to_not have_content 'Delete the question'
+    expect(page).to_not have_link 'Delete the question'
   end
 end

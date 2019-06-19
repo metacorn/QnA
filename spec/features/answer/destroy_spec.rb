@@ -28,6 +28,6 @@ feature "user can delete his answers but not another's", %q{
 
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete the answer'
+    expect(page).to_not have_link 'Delete the answer'
   end
 end
