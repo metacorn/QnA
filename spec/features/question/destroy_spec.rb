@@ -18,6 +18,7 @@ feature "user can delete his questions but not another's", %q{
 
     expect(page).to have_content "Your question was successfully deleted!"
   end
+
   scenario "user tries to delete another's question" do
     visit question_path(question2)
 
