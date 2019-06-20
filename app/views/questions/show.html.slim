@@ -1,10 +1,10 @@
-= @answer_errors_msg if @answer_errors_msg.present?
+= render 'shared/errors', resource: @answer
 
 =render 'manage_question_links' if @question.user == current_user
 h4= @question.title
 p= @question.body
 p Answers
-p= render @question.answers
+p= render @question.reload.answers
 p Your answer
 = form_with model: @answer, url: question_answers_path(@question), local: true do |f|
   = f.label :body

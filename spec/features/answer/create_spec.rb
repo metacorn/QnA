@@ -17,7 +17,6 @@ feature 'user can create answer while being on question page', %q{
     fill_in 'Body', with: "#{"body" * 25}"
     click_on 'Leave'
 
-    expect(page).to have_current_path(question_path(question))
     expect(page).to have_content 'Your answer was saved.'
     expect(page).to have_content "#{"body" * 25}"
   end
@@ -25,10 +24,9 @@ feature 'user can create answer while being on question page', %q{
   scenario 'answers to a question with errors' do
     click_on 'Leave'
 
-    expect(page).to have_current_path(question_path(question))
     expect(page).to have_content 'Your answer was not saved.'
-    expect(page).to have_content "Body can't be blank."
-    expect(page).to have_content 'Body is too short (minimum is 50 characters).'
+    expect(page).to have_content "Body can't be blank"
+    expect(page).to have_content 'Body is too short (minimum is 50 characters)'
   end
 end
 

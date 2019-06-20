@@ -13,8 +13,8 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question, notice: "Your answer was saved."
     else
-      remember_answer_errors
-      redirect_to @question, alert: "Your answer was not saved."
+      flash[:alert] = "Your answer was not saved."
+      render "questions/show"
     end
   end
 
