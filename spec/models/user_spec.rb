@@ -6,4 +6,19 @@ RSpec.describe User, type: :model do
 
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
+
+  describe '#owned?' do
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:question1) { create(:question, user: user1) }
+    let(:question2) { create(:question, user: user2) }
+
+    it 'check if user is owner of resource created by himself' do
+      expect(user1.owned?(question1)).to be_truthy
+    end
+
+    it 'check if user is owner of resource created by himself' do
+      expect(user1.owned?(question2)).to be_falsey
+    end
+  end
 end

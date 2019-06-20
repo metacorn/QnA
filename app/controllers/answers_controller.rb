@@ -20,7 +20,7 @@ class AnswersController < ApplicationController
 
   def destroy
     answer = Answer.find(params[:id])
-    return unless current_user.owned?(answer)
+    return head :forbidden unless current_user.owned?(answer)
     answer.destroy
     redirect_to answer.question, notice: "Your answer was successfully deleted!"
   end
