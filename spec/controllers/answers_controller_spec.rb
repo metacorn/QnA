@@ -33,8 +33,6 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'creates answer by the name of logged user' do
-        post :create, params: { question_id: question.id, answer: attributes_for(:answer) }
-
         new_answer_params = attributes_for(:answer)
         post :create, params: { question_id: question.id, answer: new_answer_params }
 
