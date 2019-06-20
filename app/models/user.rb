@@ -9,6 +9,6 @@ class User < ApplicationRecord
           :validatable
 
   def owned?(content)
-    self == content.user
+    content.user_id == id
   end
 end
