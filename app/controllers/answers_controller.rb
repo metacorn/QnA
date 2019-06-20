@@ -30,8 +30,4 @@ class AnswersController < ApplicationController
   def answer_params
     params.require(:answer).permit(:body)
   end
-
-  def remember_answer_errors
-    session[:answer_errors] = @answer.errors.full_messages.join(". ") + "."
-  end
 end

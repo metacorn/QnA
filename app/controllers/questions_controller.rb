@@ -8,7 +8,6 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-    recall_answer_errors
   end
 
   def new
@@ -51,10 +50,5 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body)
-  end
-
-  def recall_answer_errors
-    @answer_errors_msg = session[:answer_errors]
-    session.delete(:answer_errors)
   end
 end
