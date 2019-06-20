@@ -74,9 +74,11 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'creates a question by the name of logged user' do
-        post :create, params: { question: attributes_for(:question) }
+        new_question_params = attributes_for(:question)
+        post :create, params: { question: new_question_params }
+        created_question = Question.find_by! new_question_params
 
-        expect(assigns(:current_user)).to eq question.reload.user
+        expect(created_question.user).to eq user
       end
     end
 

@@ -35,8 +35,8 @@ RSpec.describe AnswersController, type: :controller do
       it 'creates answer by the name of logged user' do
         new_answer_params = attributes_for(:answer)
         post :create, params: { question_id: question.id, answer: new_answer_params }
-
         created_answer = question.answers.find_by! new_answer_params
+
         expect(created_answer.user).to eq user
       end
     end
