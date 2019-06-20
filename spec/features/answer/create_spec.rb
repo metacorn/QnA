@@ -8,15 +8,27 @@ feature 'user can create answer while being on question page', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  scenario 'authenticated user answers to a question' do
+  before do
     login(user)
-    question_path = question_path(question)
+    visit question_path(question)
+  end
 
-    visit question_path
+  scenario 'answers to a question' do
     fill_in 'Body', with: "#{"body" * 25}"
     click_on 'Leave'
 
-    expect(page).to have_current_path(question_path)
+    expect(page).to have_current_path(question_path(question))
+    expect(page).to have_content 'Your answer was saved.'
+    expect(page).to have_content "#{"body" * 25}"
+  end
+
+  scenario 'answers to a question with errors' do
+    click_on 'Leave'
+
+    expect(page).to have_current_path(question_path(question))
+    expect(page).to have_content 'Your answer was not saved.'
+    expect(page).to have_content "Body can't be blank."
+    expect(page).to have_content 'Body is too short (minimum is 50 characters).'
   end
 end
 
@@ -27,29 +39,6 @@ feature 'only authenticated user can create answers', %q{
 } do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
-
-  describe 'authenticated user' do
-    before do
-      login(user)
-      visit question_path(question)
-    end
-
-    scenario 'answers to a question' do
-      fill_in 'Body', with: "#{"body" * 25}"
-      click_on 'Leave'
-
-      expect(page).to have_content 'Your answer was saved.'
-      expect(page).to have_content "#{"body" * 25}"
-    end
-
-    scenario 'answers to a question with errors' do
-      click_on 'Leave'
-
-      expect(page).to have_content 'Your answer was not saved.'
-      expect(page).to have_content "Body can't be blank."
-      expect(page).to have_content 'Body is too short (minimum is 50 characters).'
-    end
-  end
 
   scenario 'unauthenticated user tries to ask a question' do
     visit question_path(question)
