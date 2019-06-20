@@ -7,4 +7,8 @@ class User < ApplicationRecord
           :recoverable,
           :rememberable,
           :validatable
+
+  def owned?(content)
+    self == content.user
+  end
 end
