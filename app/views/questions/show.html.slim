@@ -1,6 +1,6 @@
 = render 'shared/errors', resource: @answer
 
-=render 'manage_question_links' if @question.user == current_user
+=render(partial: 'shared/manage_question_links', locals: { question: @question }) if @question.user == current_user
 h4= @question.title
 p= @question.body
 p Answers
