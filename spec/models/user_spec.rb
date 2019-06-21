@@ -14,11 +14,11 @@ RSpec.describe User, type: :model do
     let(:question2) { create(:question, user: user2) }
 
     it 'check if user is owner of resource created by himself' do
-      expect(user1.owned?(question1)).to be_truthy
+      expect(user1).to be_owned(question1)
     end
 
     it 'check if user is owner of resource created by himself' do
-      expect(user1.owned?(question2)).to be_falsey
+      expect(user1).to_not be_owned(question2)
     end
   end
 end
