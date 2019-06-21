@@ -1,10 +1,12 @@
 require 'rails_helper'
+require 'byebug'
 
 RSpec.describe QuestionsController, type: :controller do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 5) }
+    let(:questions) { create_list(:question, 5, user: user) }
 
     before { get :index }
 
@@ -30,6 +32,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
     before { get :new }
 
     it 'assigns a new question to @question' do
@@ -42,6 +45,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    before { login(user) }
     before { get :edit, params: { id: question } }
 
     it 'assigns the requested question to @question' do
@@ -54,6 +58,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new question in the database' do
         expect {
@@ -65,6 +71,14 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
 
         expect(response).to redirect_to assigns(:question)
+      end
+
+      it 'creates a question by the name of logged user' do
+        new_question_params = attributes_for(:question)
+        post :create, params: { question: new_question_params }
+        created_question = Question.find_by! new_question_params
+
+        expect(created_question.user).to eq user
       end
     end
 
@@ -83,6 +97,8 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'changes question attributes' do
         patch :update, params: { id: question, question: { title: "New title for the first question", body: "#{"b" * 50}" } }
@@ -114,7 +130,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:question) { create(:question) }
+    let(:user2) { create(:user) }
+    let!(:question) { create(:question, user: user) }
+    let!(:question2) { create(:question, user: user2) }
+    before { login(user) }
 
     it 'deletes the question' do
       expect {
@@ -126,6 +145,10 @@ RSpec.describe QuestionsController, type: :controller do
       delete :destroy, params: { id: question }
 
       expect(response).to redirect_to questions_path
+    end
+
+    it "tries to delete another user's question" do
+      expect { delete :destroy, params: { id: question2 } }.to_not change(Question, :count)
     end
   end
 end
