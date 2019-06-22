@@ -17,7 +17,7 @@ RSpec.describe User, type: :model do
       expect(user1).to be_owned(question1)
     end
 
-    it 'check if user is owner of resource created by himself' do
+    it 'check if user is not owner of resource created by another user' do
       expect(user1).to_not be_owned(question2)
     end
   end

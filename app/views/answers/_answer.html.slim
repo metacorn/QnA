@@ -1,2 +1,4 @@
-p= answer.body
-p= render(partial: 'shared/manage_answer_links', locals: { answer: answer }) if current_user&.owned?(answer)
+- if answer.persisted?
+  p= answer.body
+- if answer.persisted? && current_user&.owned?(answer)
+  p= render(partial: 'shared/manage_answer_links', locals: { answer: answer })

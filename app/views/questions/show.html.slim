@@ -1,12 +1,13 @@
-= render 'shared/errors', resource: @answer
-
 =render(partial: 'shared/manage_question_links', locals: { question: @question }) if current_user&.owned?(@question)
 h4= @question.title
 p= @question.body
-p Answers
-p= render @question.reload.answers
+h4 Answers
+div.answers
+  = render @question.answers
 p Your answer
-= form_with model: @answer, url: question_answers_path(@question), local: true do |f|
+.answer-errors
+  = render 'shared/errors', resource: @answer
+= form_with model: @answer, url: question_answers_path(@question) do |f|
   = f.label :body
   = f.text_area :body
   = f.submit 'Leave'

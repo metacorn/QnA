@@ -4,4 +4,8 @@ class Answer < ApplicationRecord
 
   validates :body,  presence: true,
                     length: { minimum: 50 }
+
+  def saved?
+    !!self.id
+  end
 end

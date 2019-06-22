@@ -9,13 +9,7 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-
-    if @answer.save
-      redirect_to @question, notice: "Your answer was saved."
-    else
-      flash[:alert] = "Your answer was not saved."
-      render "questions/show"
-    end
+    @answer.save
   end
 
   def destroy
