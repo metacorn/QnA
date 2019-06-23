@@ -5,7 +5,5 @@ class Answer < ApplicationRecord
   validates :body,  presence: true,
                     length: { minimum: 50 }
 
-  def saved?
-    !!self.id
-  end
+  default_scope { order :created_at }
 end

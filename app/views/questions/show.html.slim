@@ -3,7 +3,7 @@ h4= @question.title
 p= @question.body
 h4 Answers
 div.answers
-  = render @question.answers.order(:created_at)
+  = render @question.answers
 p Your answer
 .answer-errors
   = render 'shared/errors', resource: @answer
