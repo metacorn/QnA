@@ -17,10 +17,11 @@ feature "user can delete his answers but not another's", %q{
     answer = create(:answer, question: question, user: user1)
 
     visit question_path(question)
-    click_on 'Delete the answer'
+    within '.answers' do
+      click_on 'Delete'
+    end
 
     expect(page).to have_content "Your answer was successfully deleted!"
-    expect { answer.reload }.to raise_error ActiveRecord::RecordNotFound
   end
 
   scenario "user tries to delete another's answer" do
@@ -28,6 +29,8 @@ feature "user can delete his answers but not another's", %q{
 
     visit question_path(question)
 
-    expect(page).to_not have_link 'Delete the answer'
+    within '.answers' do
+      expect(page).to_not have_link 'Delete'
+    end
   end
 end

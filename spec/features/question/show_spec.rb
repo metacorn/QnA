@@ -12,7 +12,7 @@ feature 'user can see a question and answers to it', %q{
   given(:question) { create(:question, user: user) }
   given!(:answers) { create_list(:answer, n, question: question) }
 
-  scenario 'unauthenticated user sees a question and answers' do
+  scenario 'unauthenticated user sees a question and answers', js: true do
     visit question_path(question)
 
     expect(page).to have_content question.title

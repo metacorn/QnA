@@ -1,4 +1,10 @@
 - if answer.persisted?
   p= answer.body
+
 - if answer.persisted? && current_user&.owned?(answer)
   p= render(partial: 'shared/manage_answer_links', locals: { answer: answer })
+
+= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+  = f.label :body, 'Your answer'
+  = f.text_area :body
+  = f.submit 'Update'

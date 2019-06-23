@@ -3,11 +3,11 @@ h4= @question.title
 p= @question.body
 h4 Answers
 div.answers
-  = render @question.answers
+  = render @question.answers.order(:created_at)
 p Your answer
 .answer-errors
   = render 'shared/errors', resource: @answer
-= form_with model: @answer, url: question_answers_path(@question) do |f|
+= form_with model: [@question, @answer], class: 'new-answer' do |f|
   = f.label :body
   = f.text_area :body
   = f.submit 'Leave'
