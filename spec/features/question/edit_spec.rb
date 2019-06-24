@@ -33,7 +33,6 @@ feature 'user can edit his question', %q{
         click_on 'Edit'
         fill_in 'question_body', with: new_valid_body
         click_on 'Update'
-        sleep(20)
 
         expect(page).to_not have_content(question1.body)
         expect(page).to have_content new_valid_body

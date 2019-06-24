@@ -29,7 +29,7 @@ feature 'user can edit his answer', %q{
     scenario 'edits his answer', js: true do
       within "#answer_#{answer.id}" do
         click_on 'Edit'
-        fill_in 'body', with: new_valid_body
+        fill_in 'answer_body', with: new_valid_body
         click_on 'Update'
 
         expect(page).to_not have_content answer.body
@@ -41,7 +41,7 @@ feature 'user can edit his answer', %q{
     scenario 'tries to edit his answer with errors', js: true do
       within "#answer_#{answer.id}" do
         click_on 'Edit'
-        fill_in 'body', with: new_invalid_body
+        fill_in 'answer_body', with: new_invalid_body
         click_on 'Update'
 
         expect(page).to have_content answer.body

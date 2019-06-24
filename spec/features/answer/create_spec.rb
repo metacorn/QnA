@@ -36,10 +36,12 @@ feature 'only authenticated user can create answers', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  scenario 'unauthenticated user tries to ask a question' do
+  scenario 'unauthenticated user tries to get an answer' do
     visit question_path(question)
-    fill_in 'Body', with: "#{"body" * 25}"
-    click_on 'Leave'
+    within ".new-answer" do
+      fill_in 'Body', with: "#{"body" * 25}"
+      click_on 'Leave'
+    end
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
