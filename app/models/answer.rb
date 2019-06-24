@@ -2,7 +2,7 @@ class Answer < ApplicationRecord
   belongs_to :user
   belongs_to :question
 
-  default_scope { order :created_at }
+  default_scope { order(best: :desc, created_at: :asc) }
 
   validates :body,  presence: true,
                     length: { minimum: 50 }
