@@ -1,0 +1,7 @@
+p
+  => link_to('Mark as the best', mark_answer_path(answer), method: :post, remote: true) \
+  if current_user&.owned?(answer.question) && !answer.best?
+  => link_to('Edit', '#', class: 'edit-answer-links', data: { answer_id: answer.id }) \
+  if current_user&.owned?(answer)
+  = link_to('Delete', answer_path(answer), method: :delete, remote: true) \
+  if current_user&.owned?(answer)

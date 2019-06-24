@@ -1,9 +1,10 @@
 div id="answer_#{answer.id}"
   - if answer.persisted?
+    - if answer.best?
+      div id="best-answer"
+        h4 The best answer
     p= answer.body
-
-  - if answer.persisted? && current_user&.owned?(answer)
-    p= render(partial: 'shared/manage_answer_links', locals: { answer: answer })
+    p= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     = f.label :body, 'Your answer'

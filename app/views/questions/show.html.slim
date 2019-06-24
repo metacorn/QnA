@@ -1,7 +1,7 @@
 div id="question_#{@question.id}"
   = render 'question_for_show', resource: @question
+h4 Answers
 div.answers
-  h4 Answers
   = render @question.answers
 p Your answer
 .answer-errors
