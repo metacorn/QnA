@@ -9,6 +9,7 @@ feature 'user can edit his answer', %q{
   given(:user2) { create(:user) }
   given(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
+  given!(:answer2) { create(:answer, question: question, user: user2) }
 
   scenario 'unauthenticated user can not edit answers' do
     visit question_path(question)
@@ -26,9 +27,9 @@ feature 'user can edit his answer', %q{
     given(:new_invalid_body) { "New answer's invalid body" }
 
     scenario 'edits his answer', js: true do
-      within '.answers' do
+      within "#answer_#{answer.id}" do
         click_on 'Edit'
-        fill_in 'answer_body', with: new_valid_body
+        fill_in 'body', with: new_valid_body
         click_on 'Update'
 
         expect(page).to_not have_content answer.body
@@ -38,9 +39,9 @@ feature 'user can edit his answer', %q{
     end
 
     scenario 'tries to edit his answer with errors', js: true do
-      within '.answers' do
+      within "#answer_#{answer.id}" do
         click_on 'Edit'
-        fill_in 'answer_body', with: new_invalid_body
+        fill_in 'body', with: new_invalid_body
         click_on 'Update'
 
         expect(page).to have_content answer.body
@@ -49,11 +50,7 @@ feature 'user can edit his answer', %q{
     end
 
     scenario "tries to edit another user's answer" do
-      click_on 'Log out'
-      login(user2)
-      visit question_path(question)
-
-      within '.answers' do
+      within "#answer_#{answer2.id}" do
         expect(page).to_not have_link 'Edit'
       end
     end

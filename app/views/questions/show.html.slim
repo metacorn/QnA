@@ -1,8 +1,7 @@
-=render(partial: 'shared/manage_question_links', locals: { question: @question }) if current_user&.owned?(@question)
-h4= @question.title
-p= @question.body
-h4 Answers
+div id="question_#{@question.id}"
+  = render 'question_for_show', resource: @question
 div.answers
+  h4 Answers
   = render @question.answers
 p Your answer
 .answer-errors

@@ -14,7 +14,9 @@ feature "user can delete his questions but not another's", %q{
 
   scenario 'user deletes his question' do
     visit question_path(question1)
-    click_on 'Delete the question'
+    within "#question_#{question1.id}" do
+      click_on 'Delete'
+    end
 
     expect(page).to have_content "Your question was successfully deleted!"
     expect(page).to_not have_content question1.title
@@ -23,6 +25,8 @@ feature "user can delete his questions but not another's", %q{
   scenario "user tries to delete another's question" do
     visit question_path(question2)
 
-    expect(page).to_not have_link 'Delete the question'
+    within "#question_#{question2.id}" do
+      expect(page).to_not have_link 'Delete'
+    end
   end
 end
