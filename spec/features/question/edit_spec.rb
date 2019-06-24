@@ -40,7 +40,25 @@ feature 'user can edit his question', %q{
       end
     end
 
-    scenario 'try to edit his question with errors'
-    scenario "try to edit another user's question"
+    scenario 'tries to edit his question with errors', js: true do
+      visit question_path(question1)
+
+      within "#question_#{question1.id}" do
+        click_on 'Edit'
+        fill_in 'question_body', with: new_invalid_body
+        click_on 'Update'
+
+        expect(page).to have_content(question1.body)
+      end
+      expect(page).to have_content 'Body is too short (minimum is 50 characters)'
+    end
+
+    scenario "tries to edit another user's question", js: true do
+      visit question_path(question2)
+
+      within "#question_#{question2.id}" do
+        expect(page).to_not have_link 'Edit'
+      end
+    end
   end
 end
