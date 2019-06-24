@@ -46,6 +46,11 @@ feature 'user can mark one answer as the best', %q{
       end
     end
 
-    scenario "tries to mark an answer to another's user question as the best"
+    scenario "tries to mark an answer to another's user question as the best" do
+      visit question_path(question2)
+      within "#answer_#{answer1.id}" do
+        expect(page).to_not have_link 'Mark as the best'
+      end
+    end
   end
 end
