@@ -11,6 +11,7 @@ feature 'user can mark one answer as the best', %q{
   given(:question2) { create(:question, user: user2) }
   given!(:answer1) { create(:answer, question: question2, user: user1) }
   given!(:answer2) { create(:answer, question: question1, user: user2) }
+  given!(:answer3) { create(:answer, question: question1, user: user2) }
 
   scenario 'unauthenticated user tries to choose the best answer' do
     visit question_path(question1)
@@ -29,6 +30,19 @@ feature 'user can mark one answer as the best', %q{
         click_on 'Mark as the best'
 
         expect(page).to have_content 'The best answer'
+        expect(page).to_not have_link 'Mark as the best'
+      end
+
+      within "#answer_#{answer3.id}" do
+        click_on 'Mark as the best'
+
+        expect(page).to have_content 'The best answer'
+        expect(page).to_not have_link 'Mark as the best'
+      end
+
+      within "#answer_#{answer2.id}" do
+        expect(page).to_not have_content 'The best answer'
+        expect(page).to have_link 'Mark as the best'
       end
     end
 
