@@ -8,7 +8,7 @@ class User < ApplicationRecord
           :rememberable,
           :validatable
 
-  def owned?(content)
+  def owner?(content)
     content.user_id == id
   end
 end

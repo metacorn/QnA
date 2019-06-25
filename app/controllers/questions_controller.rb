@@ -29,12 +29,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    return head :forbidden unless current_user.owned?(@question)
+    return head :forbidden unless current_user.owner?(@question)
     @question.update(question_params)
   end
 
   def destroy
-    return head :forbidden unless current_user.owned?(@question)
+    return head :forbidden unless current_user.owner?(@question)
     @question.destroy
     redirect_to questions_path, notice: "Your question was successfully deleted!"
   end

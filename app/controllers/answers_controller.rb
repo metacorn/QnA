@@ -14,18 +14,18 @@ class AnswersController < ApplicationController
   end
 
   def update
-    return head :forbidden unless current_user.owned?(@answer)
+    return head :forbidden unless current_user.owner?(@answer)
     @answer.update(answer_params)
     @question = @answer.question
   end
 
   def destroy
-    return head :forbidden unless current_user.owned?(@answer)
+    return head :forbidden unless current_user.owner?(@answer)
     @answer.destroy
   end
 
   def mark
-    return head :forbidden unless current_user.owned?(@answer.question)
+    return head :forbidden unless current_user.owner?(@answer.question)
     @answer.mark_as_best
     @question = @answer.question
   end

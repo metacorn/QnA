@@ -43,7 +43,7 @@ RSpec.describe AnswersController, type: :controller do
           format: :js
         created_answer = question1.answers.find_by! new_answer_params
 
-        expect(user1).to be_owned(created_answer)
+        expect(user1).to be_owner(created_answer)
       end
 
       it 'renders create template', js: true do
