@@ -11,10 +11,10 @@ RSpec.describe Answer, type: :model do
   let(:answer1) { create(:answer, question: question, user: user) }
   let(:answer2) { create(:answer, question: question, user: user) }
 
-  before { answer1.mark_as_best }
-
   describe '#mark_best' do
     it 'marks one answer as the best' do
+      answer1.mark_as_best
+
       expect(answer1).to be_best
       expect(answer2).to_not be_best
     end
@@ -22,7 +22,9 @@ RSpec.describe Answer, type: :model do
 
   describe 'default_scope order' do
     it 'sorting answers with the best as the first' do
-      expect(answer1.question.answers.first).to eq answer1
+      answer1.mark_as_best
+
+      expect(answer1.question.answers).to eq [answer1, answer2]
     end
   end
 end

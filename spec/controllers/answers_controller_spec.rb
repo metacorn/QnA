@@ -19,65 +19,80 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
-    before { login(user1) }
+    context 'authenticated user' do
+      before { login(user1) }
 
-    context 'with valid attributes' do
-      it 'saves a new answer in the database' do
-        expect {
+      context 'with valid attributes' do
+        it 'saves a new answer in the database' do
+          expect {
+            post :create,
+              params: {
+                question_id: question1.id,
+                answer: attributes_for(:answer)
+              },
+              format: :js
+          }.to change(question1.answers, :count).by(1)
+        end
+
+        it 'creates answer by the name of logged user' do
+          new_answer_params = attributes_for(:answer)
           post :create,
             params: {
               question_id: question1.id,
-              answer: attributes_for(:answer)
+              answer: new_answer_params
             },
             format: :js
-        }.to change(question1.answers, :count).by(1)
+          created_answer = question1.answers.find_by! new_answer_params
+
+          expect(user1).to be_owner(created_answer)
+        end
+
+        it 'renders create template', js: true do
+          post :create,
+              params: {
+                question_id: question1.id,
+                answer: attributes_for(:answer)
+              },
+              format: :js
+
+          expect(response).to render_template 'create'
+        end
       end
 
-      it 'creates answer by the name of logged user' do
-        new_answer_params = attributes_for(:answer)
-        post :create,
-          params: {
-            question_id: question1.id,
-            answer: new_answer_params
-          },
-          format: :js
-        created_answer = question1.answers.find_by! new_answer_params
+      context 'with invalid attributes' do
+        it 'does not save a new answer with short body in the database' do
+          expect {
+            post :create,
+              params: {
+                question_id: question1.id,
+                answer: attributes_for(:answer, :invalid)
+              },
+              format: :js
+          }.to_not change(Answer, :count)
+        end
 
-        expect(user1).to be_owner(created_answer)
-      end
-
-      it 'renders create template', js: true do
-        post :create,
-            params: {
-              question_id: question1.id,
-              answer: attributes_for(:answer)
-            },
-            format: :js
-
-        expect(response).to render_template 'create'
-      end
-    end
-
-    context 'with invalid attributes' do
-      it 'does not save a new answer with short body in the database' do
-        expect {
+        it 'renders create template' do
           post :create,
             params: {
               question_id: question1.id,
               answer: attributes_for(:answer, :invalid)
             },
             format: :js
-        }.to_not change(Answer, :count)
+          expect(response).to render_template 'create'
+        end
       end
+    end
 
-      it 'renders create template' do
-        post :create,
-          params: {
-            question_id: question1.id,
-            answer: attributes_for(:answer, :invalid)
-          },
-          format: :js
-        expect(response).to render_template 'create'
+    context 'unauthenticated user' do
+      it 'tries to create an answer' do
+        expect {
+          post :create,
+            params: {
+              question_id: question1.id,
+              answer: attributes_for(:answer)
+            },
+            format: :js
+        }.to_not change(question1.answers, :count)
       end
     end
   end
@@ -110,12 +125,10 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'authenticated user' do
-      it "tries to delete an answer" do
-        expect {
-          delete :destroy, params: { id: answer2 }, format: :js
-        }.to_not change(Answer, :count)
-      end
+    it "authenticated user tries to delete an answer" do
+      expect {
+        delete :destroy, params: { id: answer2 }, format: :js
+      }.to_not change(Answer, :count)
     end
   end
 
