@@ -29,6 +29,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
+    return head :forbidden unless current_user.owned?(@question)
     @question.update(question_params)
   end
 

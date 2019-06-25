@@ -1,6 +1,6 @@
 h4= @question.title
 p= @question.body
-=render(partial: 'shared/manage_question_links', locals: { question: @question }) if current_user&.owned?(@question)
+=render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owned?(@question)
 .question-errors
   =render 'shared/errors', resource: @question
 = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|

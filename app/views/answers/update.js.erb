@@ -1,4 +1,4 @@
 $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>')
-<% if !@answer.errors.present? %>
+<% if @answer.errors.empty? %>
   $("#answer_" + <%= @answer.id %>).replaceWith('<%= j render @answer %>')
 <% end %>
