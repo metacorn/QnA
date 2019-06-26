@@ -206,14 +206,12 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer3) { create(:answer, question: question1, user: user2) }
 
     context 'authenticated user' do
-      before { login(user1) }
+      before do
+        login(user1)
+        answer2.best = true
+      end
 
       it 'marks answers to his question' do
-        post :mark, params: { id: answer2 }, format: :js
-        answer2.reload
-
-        expect(answer2).to be_best
-
         post :mark, params: { id: answer3 }, format: :js
         answer2.reload
         answer3.reload
@@ -225,7 +223,7 @@ RSpec.describe AnswersController, type: :controller do
       it "tries to mark an answer to another user's question" do
         post :mark, params: { id: answer1 }, format: :js
 
-        expect(answer2).to_not be_best
+        expect(answer1).to_not be_best
       end
     end
 
