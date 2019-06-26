@@ -97,34 +97,86 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    before { login(user) }
+    context 'authenticated user' do
+      let(:user2) { create(:user) }
+      let(:question2) { create(:question, user: user2) }
+      let(:new_title) { "New title for the first question" }
+      let(:new_body) { "#{"b" * 50}" }
 
-    context 'with valid attributes' do
-      it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: "New title for the first question", body: "#{"b" * 50}" } }
-        question.reload
+      before { login(user) }
 
-        expect(question.title).to eq("New title for the first question")
-        expect(question.body).to eq("#{"b" * 50}")
+      context 'with valid attributes' do
+        it 'changes question attributes' do
+          patch :update,
+            params: {
+              id: question,
+              question: { title: new_title, body: new_body }
+            },
+            format: :js
+          question.reload
+
+          expect(question.title).to eq(new_title)
+          expect(question.body).to eq(new_body)
+        end
+
+        it "tries to update another user's question" do
+          expect {
+            patch :update,
+              params: {
+                id: question2,
+                question: attributes_for(:question)
+              },
+              format: :js
+          }.to_not change { question.reload.updated_at }
+        end
+
+        it 'renders update view' do
+          patch :update,
+            params: {
+              id: question,
+              question: attributes_for(:question)
+            },
+            format: :js
+
+          expect(response).to render_template :update
+        end
       end
 
-      it 'redirects to updated question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
+      context 'with invalid attributes' do
+        it 'does not change the question' do
+          expect {
+            patch :update,
+              params: {
+                id: question,
+                question: attributes_for(:question, :invalid)
+              },
+              format: :js
+          }.to_not change { question.reload.updated_at }
+        end
 
-        expect(response).to redirect_to question
+        it 'renders update view' do
+          patch :update,
+            params: {
+              id: question,
+              question: attributes_for(:question, :invalid)
+            },
+            format: :js
+
+          expect(response).to render_template :update
+        end
       end
     end
-    context 'with invalid attributes' do
-      it 'does not change the question' do
+
+    context 'unauthenticated user' do
+      it 'tries to change question attributes' do
         expect {
-          patch :update, params: { id: question, question: attributes_for(:question, :invalid) }
+          patch :update,
+            params: {
+              id: question,
+              question: attributes_for(:question)
+            },
+            format: :js
         }.to_not change { question.reload.updated_at }
-      end
-
-      it 'renders edit view' do
-        patch :update, params: { id: question, question: attributes_for(:question, :invalid) }
-
-        expect(response).to render_template :edit
       end
     end
   end
@@ -148,7 +200,9 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     it "tries to delete another user's question" do
-      expect { delete :destroy, params: { id: question2 } }.to_not change(Question, :count)
+      expect {
+        delete :destroy, params: { id: question2 }
+      }.to_not change(Question, :count)
     end
   end
 end
