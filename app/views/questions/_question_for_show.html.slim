@@ -1,4 +1,4 @@
-h4= @question.title
+h4 class="mt-2"= @question.title
 p class="mb-1"= @question.body
 p class="mb-1"=render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 .question-errors
