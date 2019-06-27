@@ -14,7 +14,7 @@ feature 'user can create answer while being on question page', %q{
   end
 
   scenario 'answers to a question', js: true do
-    fill_in 'Body', with: "#{"body" * 25}"
+    fill_in 'answer_body', with: "#{"body" * 25}"
     click_on 'Leave'
 
     expect(page).to have_content "#{"body" * 25}"
@@ -38,10 +38,8 @@ feature 'only authenticated user can create answers', %q{
 
   scenario 'unauthenticated user tries to get an answer' do
     visit question_path(question)
-    within ".new-answer" do
-      fill_in 'Body', with: "#{"body" * 25}"
-      click_on 'Leave'
-    end
+    fill_in 'answer_body', with: "#{"body" * 25}"
+    click_on 'Leave'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end

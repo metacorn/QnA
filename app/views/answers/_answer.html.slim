@@ -1,12 +1,14 @@
-div id="answer_#{answer.id}"
+div id="answer_#{answer.id}" class="mb-3"
   - if answer.persisted?
     - if answer.best?
       div id="best-answer"
-        h4 The best answer
-    p= answer.body
-    p= render(partial: 'shared/answer_links', locals: { answer: answer })
+        h5 The best answer
+    p class="mb-1"= answer.body
+    p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-    = f.label :body, 'Your answer'
-    = f.text_area :body
+    = f.label :body, 'Your answer', class: "mb-0"
+    br
+    = f.text_area :body, cols: 32, rows: 3
+    br
     = f.submit 'Update'

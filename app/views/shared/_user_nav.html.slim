@@ -1,7 +1,6 @@
-- if current_user
-  p= link_to 'Log out', destroy_user_session_path, method: :delete
-- else
-  p
-  = link_to 'Log in', new_user_session_path
-  |&nbsp;|&nbsp;
-  = link_to 'Sign up', new_user_registration_path
+p class="mb-0"
+  - if current_user
+    => link_to 'Log out', destroy_user_session_path, method: :delete
+  - else
+    => link_to 'Log in', new_user_session_path
+    = link_to 'Sign up', new_user_registration_path
