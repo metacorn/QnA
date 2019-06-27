@@ -7,8 +7,6 @@ div id="answer_#{answer.id}" class="mb-3"
     p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-    = f.label :body, 'Your answer', class: "mb-0"
-    br
-    = f.text_area :body, cols: 32, rows: 3
-    br
-    = f.submit 'Update'
+    div= f.label :body, 'Your answer', class: "mb-0"
+    div= f.text_area :body, cols: 32, rows: 3
+    div= f.submit 'Update'

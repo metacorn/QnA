@@ -1,15 +1,21 @@
-h4 class="mt-2"= @question.title
-p class="mb-1"= @question.body
-p class="mb-1"=render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
-.question-errors
-  =render 'shared/errors', resource: @question
-= form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
-  = f.label :title, class: "mb-0"
-  br
-  = f.text_field :title, size: 32, class: "mb-2"
-  br
-  = f.label :body, 'Body', class: "mb-0"
-  br
-  = f.text_area :body, cols: 32, rows: 3
-  br
-  = f.submit 'Update'
+div id="question_#{@question.id}"
+  h4 class="mt-2"= @question.title
+  p class="mb-1"= @question.body
+
+  - if @question.files.attached?
+    - @question.files.each do |file|
+      p= link_to file.filename.to_s, url_for(file)
+
+  p class="mb-1"=render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
+
+  .question-errors
+    =render 'shared/errors', resource: @question
+
+  = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
+    div= f.label :title, class: "mb-0"
+    div= f.text_field :title, size: 29, class: "mb-2"
+    div= f.label :body, 'Body', class: "mb-0"
+    div= f.text_area :body, cols: 32, rows: 3
+    div= f.label :files, 'Files', class: "mb-0"
+    div= f.file_field :files, multiple: true, class: "mb-3"
+    div= f.submit 'Update'
