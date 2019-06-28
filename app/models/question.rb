@@ -4,6 +4,8 @@ class Question < ApplicationRecord
 
   has_many_attached :files
 
+  default_scope { order(:created_at) }
+
   validates :title, presence: true,
                     length: { in: 15..75 },
                     uniqueness: { case_sensitive: false }
