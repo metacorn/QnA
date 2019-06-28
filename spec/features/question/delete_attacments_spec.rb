@@ -30,7 +30,7 @@ feature "user can delete attachments of his question", %q{
       end
     end
 
-    scenario "deletes attached files of his question" do
+    scenario "tries to delete attached files of another user's question" do
       visit question_path(question2)
 
       within "#question_#{question2.id}" do

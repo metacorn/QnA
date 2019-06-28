@@ -10,7 +10,9 @@ div id="answer_#{answer.id}" class="mb-3"
     - if answer.files.attached?
       div class="answer-files mb-1"
         - answer.files.each do |file|
-          p.mb-0= link_to file.filename.to_s, url_for(file)
+          p.mb-0
+            = link_to file.filename.to_s, url_for(file)
+            =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(answer)
 
     p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
 
