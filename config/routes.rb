@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'files/destroy'
   devise_for :users
   root to: "questions#index"
 
@@ -8,5 +9,7 @@ Rails.application.routes.draw do
         post :mark
       end
     end
+
+    resources :files, shallow: true, only: %i[destroy]
   end
 end

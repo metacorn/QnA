@@ -5,9 +5,11 @@ div id="question_#{@question.id}"
   - if @question.files.attached?
     div class="question-files mb-1"
       - @question.files.each do |file|
-        p.mb-0= link_to file.filename.to_s, url_for(file)
+        p.mb-0
+          = link_to file.filename.to_s, url_for(file)
+          =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(@question)
 
-  p class="mb-1"=render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
+  p class="mb-1"= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 
   .question-errors
     =render 'shared/errors', resource: @question
