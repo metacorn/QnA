@@ -38,6 +38,17 @@ feature 'user can edit his answer', %q{
       end
     end
 
+    scenario 'edits his answer with adding attached files', js: true do
+      within "#answer_#{answer.id}" do
+        click_on 'Edit'
+        attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update'
+
+        expect(page).to have_link "rails_helper.rb"
+        expect(page).to have_link "spec_helper.rb"
+      end
+    end
+
     scenario 'tries to edit his answer with errors', js: true do
       within "#answer_#{answer.id}" do
         click_on 'Edit'

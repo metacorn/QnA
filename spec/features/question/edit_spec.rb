@@ -40,7 +40,7 @@ feature 'user can edit his question', %q{
       end
     end
 
-    scenario 'edits his question with attaching files', js: true do
+    scenario 'edits his question with adding attached files', js: true do
       visit question_path(question1)
 
       within "#question_#{question1.id}" do

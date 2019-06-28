@@ -3,8 +3,9 @@ div id="question_#{@question.id}"
   p class="mb-1"= @question.body
 
   - if @question.files.attached?
-    - @question.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
+    div class="question-files mb-1"
+      - @question.files.each do |file|
+        p.mb-0= link_to file.filename.to_s, url_for(file)
 
   p class="mb-1"=render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 

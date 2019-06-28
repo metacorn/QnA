@@ -8,12 +8,15 @@ div id="answer_#{answer.id}" class="mb-3"
     p class="mb-1"= answer.body
 
     - if answer.files.attached?
-      - answer.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)
+      div class="answer-files mb-1"
+        - answer.files.each do |file|
+          p.mb-0= link_to file.filename.to_s, url_for(file)
 
     p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     div= f.label :body, 'Your answer', class: "mb-0"
     div= f.text_area :body, cols: 32, rows: 3
+    div= f.label :files, 'Files', class: "mb-0"
+    div= f.file_field :files, multiple: true, class: "mb-3"
     div= f.submit 'Update'
