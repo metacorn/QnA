@@ -20,5 +20,5 @@ div id="question_#{@question.id}"
     div= f.label :body, 'Body', class: "mb-0"
     div= f.text_area :body, cols: 32, rows: 3
     div= f.label :files, 'Files', class: "mb-0"
-    div= f.file_field :files, multiple: true, class: "mb-3"
+    div= f.file_field :files, multiple: true, direct_upload: true, class: "mb-3"
     div= f.submit 'Update'
