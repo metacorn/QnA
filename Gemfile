@@ -21,6 +21,8 @@ gem 'devise'
 gem 'jquery-rails'
 # UI
 gem 'bootstrap', '~> 4.3.1'
+# Google Cloud Storage
+gem "google-cloud-storage", "~> 1.11", require: false
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
