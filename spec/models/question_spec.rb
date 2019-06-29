@@ -13,7 +13,5 @@ RSpec.describe Question, type: :model do
 
   it { should validate_uniqueness_of(:title).case_insensitive }
 
-  it 'has many attached files' do
-    expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
-  end
+  it { should have_many(:files_attachments) }
 end

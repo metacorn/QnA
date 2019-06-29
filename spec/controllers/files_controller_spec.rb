@@ -20,12 +20,14 @@ RSpec.describe FilesController, type: :controller do
         expect {
           delete :destroy, params: { id: question_attachment1 }, format: :js
         }.to change(question1.files.attachments, :count).by(-1)
+        expect { question_attachment1.reload }.to raise_error ActiveRecord::RecordNotFound
       end
 
       it "deletes users's answer attachment" do
         expect {
           delete :destroy, params: { id: answer_attachment2 }, format: :js
         }.to change(answer2.files.attachments, :count).by(-1)
+        expect { answer_attachment2.reload }.to raise_error ActiveRecord::RecordNotFound
       end
 
       it "tries to delete another user's question attachment" do
