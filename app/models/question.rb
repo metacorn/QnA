@@ -2,6 +2,10 @@ class Question < ApplicationRecord
   belongs_to :user
   has_many :answers, dependent: :destroy
 
+  has_many_attached :files
+
+  default_scope { order(:created_at) }
+
   validates :title, presence: true,
                     length: { in: 15..75 },
                     uniqueness: { case_sensitive: false }

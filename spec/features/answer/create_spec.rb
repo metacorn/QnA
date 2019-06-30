@@ -14,7 +14,7 @@ feature 'user can create answer while being on question page', %q{
   end
 
   scenario 'answers to a question', js: true do
-    fill_in 'Body', with: "#{"body" * 25}"
+    fill_in 'answer_body', with: "#{"body" * 25}"
     click_on 'Leave'
 
     expect(page).to have_content "#{"body" * 25}"
@@ -25,6 +25,15 @@ feature 'user can create answer while being on question page', %q{
 
     expect(page).to have_content "Body can't be blank"
     expect(page).to have_content 'Body is too short (minimum is 50 characters)'
+  end
+
+  scenario 'answers to a question with attached files', js: true do
+    fill_in 'answer_body', with: "#{"body" * 25}"
+    attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+    click_on 'Leave'
+
+    expect(page).to have_link "rails_helper.rb"
+    expect(page).to have_link "spec_helper.rb"
   end
 end
 
@@ -38,10 +47,8 @@ feature 'only authenticated user can create answers', %q{
 
   scenario 'unauthenticated user tries to get an answer' do
     visit question_path(question)
-    within ".new-answer" do
-      fill_in 'Body', with: "#{"body" * 25}"
-      click_on 'Leave'
-    end
+    fill_in 'answer_body', with: "#{"body" * 25}"
+    click_on 'Leave'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end

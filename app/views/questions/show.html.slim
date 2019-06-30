@@ -1,12 +1,17 @@
-div id="question_#{@question.id}"
+.question
   = render 'question_for_show', resource: @question
-h4 Answers
+
+h5 class="mt-3" Answers
+
 div.answers
   = render @question.answers
-p Your answer
+
 .answer-errors
   = render 'shared/errors', resource: @answer
+
 = form_with model: [@question, @answer], class: 'new-answer' do |f|
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Leave'
+  div= f.label :body, 'Your answer', class: "mb-0"
+  div= f.text_area :body, cols: 32, rows: 3
+  div= f.label :files, 'Files', class: "mb-0"
+  div= f.file_field :files, multiple: true, direct_upload: true, class: "mb-3"
+  div= f.submit 'Leave'

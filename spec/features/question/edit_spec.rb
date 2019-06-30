@@ -40,6 +40,19 @@ feature 'user can edit his question', %q{
       end
     end
 
+    scenario 'edits his question with adding attached files', js: true do
+      visit question_path(question1)
+
+      within "#question_#{question1.id}" do
+        click_on 'Edit'
+        attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Update'
+
+        expect(page).to have_link "rails_helper.rb"
+        expect(page).to have_link "spec_helper.rb"
+      end
+    end
+
     scenario 'tries to edit his question with errors', js: true do
       visit question_path(question1)
 

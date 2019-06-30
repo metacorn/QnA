@@ -2,6 +2,8 @@ class Answer < ApplicationRecord
   belongs_to :user
   belongs_to :question
 
+  has_many_attached :files
+
   default_scope { order(best: :desc, created_at: :asc) }
   scope :best, -> { where(best: true) }
 

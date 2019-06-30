@@ -8,5 +8,7 @@ Rails.application.routes.draw do
         post :mark
       end
     end
+
+    resources :files, shallow: true, only: %i[destroy]
   end
 end

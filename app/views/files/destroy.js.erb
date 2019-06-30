@@ -1,0 +1,7 @@
+<% if @file.record_type == "Question" %>
+  <% @question = @file.record %>
+  $("#question_" + <%= @question.id %>).replaceWith('<%= j render 'questions/question_for_show', resource: @question %>')
+<% elsif @file.record_type == "Answer" %>
+  <% @answer = @file.record %>
+  $("#answer_" + <%= @answer.id %>).replaceWith('<%= j render 'answers/answer', answer: @answer %>')
+<% end %>
