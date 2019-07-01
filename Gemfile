@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:github) { |repo| 'https://github.com/#{repo}.git' }
 
 ruby '2.6.3'
 
@@ -22,7 +22,9 @@ gem 'jquery-rails'
 # UI
 gem 'bootstrap', '~> 4.3.1'
 # Google Cloud Storage
-gem "google-cloud-storage", "~> 1.11", require: false
+gem 'google-cloud-storage', '~> 1.11', require: false
+# Nested forms
+gem 'cocoon'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
