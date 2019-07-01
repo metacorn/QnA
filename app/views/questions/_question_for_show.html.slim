@@ -9,6 +9,12 @@ div id="question_#{@question.id}"
           = link_to file.filename.to_s, url_for(file)
           =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(@question)
 
+  - if @question.links.present?
+    div class="question-links mb-1"
+      - @question.links.each do |link|
+        p.mb-0
+          = link_to link.name, link.url, target: "_blank"
+
   p class="mb-1"= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 
   .question-errors

@@ -14,6 +14,12 @@ div id="answer_#{answer.id}" class="mb-3"
             = link_to file.filename.to_s, url_for(file)
             =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(answer)
 
+    - if answer.links.present?
+      div class="answer-links mb-1"
+        - answer.links.each do |link|
+          p.mb-0
+            = link_to link.name, link.url, target: "_blank"
+
     p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|

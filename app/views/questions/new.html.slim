@@ -4,8 +4,20 @@
   div class="form-group"
     div= f.label :title, class: "mb-0"
     div= f.text_field :title, size: 29, class: "mb-2"
+
     div= f.label :body, 'Body', class: "mb-0"
     div= f.text_area :body, cols: 32, rows: 3
+
     div= f.label :files, 'Files', class: "mb-0"
-    div= f.file_field :files, multiple: true, class: "mb-3"
-    div= f.submit 'Ask'
+    div= f.file_field :files, multiple: true, class: "mb-1"
+
+    p.mb-0 Links
+    .links
+      = f.fields_for :links do |l|
+        div= l.label :name, class: "mb-0"
+        div= l.text_field :name, size: 29, class: "mb-1"
+
+        div= l.label :url, class: "mb-0"
+        div= l.text_field :url, size: 29, class: "mb-2"
+
+    .mt-10= f.submit 'Ask'
