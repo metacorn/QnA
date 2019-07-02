@@ -20,14 +20,14 @@ feature 'user can add links to a question', %q{
 
     within '#new-links .nested-fields:nth-child(1)' do
       fill_in 'Name', with: 'My gist #1'
-      fill_in 'Url', with: gist_url1
+      fill_in 'URL', with: gist_url1
     end
 
     click_on 'Add a link'
 
     within '#new-links .nested-fields:nth-child(2)' do
       fill_in 'Name', with: 'My gist #2'
-      fill_in 'Url', with: gist_url2
+      fill_in 'URL', with: gist_url2
     end
 
     click_on 'Ask'
