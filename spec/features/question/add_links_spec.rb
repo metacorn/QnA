@@ -6,20 +6,33 @@ feature 'user can add links to a question', %q{
   i'd like to be able to add links
 } do
   given(:user) { create(:user) }
-  given(:gist_url) { 'https://gist.github.com/metacorn/361365b73824b830cded8cd527850bc5' }
+  given(:gist_url1) { 'https://gist.github.com/metacorn/361365b73824b830cded8cd527850bc5' }
+  given(:gist_url2) { 'https://gist.github.com/metacorn/06f8fcade496200f530fdc5e54816b4e' }
 
-  scenario 'user adds a link when asks a question' do
-      login user
-      visit new_question_path
+  scenario 'user adds several links when asks a question', js: true do
+    login user
+    visit new_question_path
 
-      fill_in 'Title', with: 'Test question title'
-      fill_in 'Body', with: "#{"body" * 25}"
+    fill_in 'Title', with: 'Test question title'
+    fill_in 'Body', with: "#{"body" * 25}"
 
-      fill_in 'Name', with: 'My gist'
-      fill_in 'Url', with: gist_url
+    click_on 'Add a link'
 
-      click_on 'Ask'
-
-      expect(page).to have_link 'My gist', href: gist_url
+    within '#new-links .nested-fields:nth-child(1)' do
+      fill_in 'Name', with: 'My gist #1'
+      fill_in 'Url', with: gist_url1
     end
+
+    click_on 'Add a link'
+
+    within '#new-links .nested-fields:nth-child(2)' do
+      fill_in 'Name', with: 'My gist #2'
+      fill_in 'Url', with: gist_url2
+    end
+
+    click_on 'Ask'
+
+    expect(page).to have_link 'My gist #1', href: gist_url1
+    expect(page).to have_link 'My gist #2', href: gist_url2
+  end
 end

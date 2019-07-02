@@ -9,15 +9,12 @@
     div= f.text_area :body, cols: 32, rows: 3
 
     div= f.label :files, 'Files', class: "mb-0"
-    div= f.file_field :files, multiple: true, class: "mb-1"
+    div= f.file_field :files, multiple: true, class: "mb-2"
 
     p.mb-0 Links
-    .links
+    #new-links
       = f.fields_for :links do |l|
-        div= l.label :name, class: "mb-0"
-        div= l.text_field :name, size: 29, class: "mb-1"
+      .links
+        = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
 
-        div= l.label :url, class: "mb-0"
-        div= l.text_field :url, size: 29, class: "mb-2"
-
-    .mt-10= f.submit 'Ask'
+    .mt-2= f.submit 'Ask'
