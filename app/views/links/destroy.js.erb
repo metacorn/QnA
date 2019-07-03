@@ -1,0 +1,5 @@
+<% if @links.present? %>
+  $('.question-links-list').html('<%= render(partial: 'links/link', collection: @links, as: :link) %>')
+<% else %>
+  $('.question-links').remove()
+<% end %>

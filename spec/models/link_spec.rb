@@ -6,10 +6,10 @@ RSpec.describe Link, type: :model do
   it { should validate_presence_of :name }
   it { should validate_presence_of :url }
 
-  let(:valid_link) { build(:link, :valid) }
-  let(:invalid_link) { build(:link, :invalid) }
-  let(:valid_gist_link) { build(:link, :valid_gist) }
-  let(:invalid_gist_link) { build(:link, :invalid_gist) }
+  let(:valid_link) { build(:link, :valid, :linkable) }
+  let(:invalid_link) { build(:link, :invalid, :linkable) }
+  let(:valid_gist_link) { build(:link, :valid_gist, :linkable) }
+  let(:invalid_gist_link) { build(:link, :invalid_gist, :linkable) }
 
   it 'validates valid url format' do
     expect(valid_link).to be_valid

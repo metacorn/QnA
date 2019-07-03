@@ -11,4 +11,6 @@ Rails.application.routes.draw do
 
     resources :files, shallow: true, only: %i[destroy]
   end
+
+  resources :links, only: :destroy
 end

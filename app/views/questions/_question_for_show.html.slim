@@ -3,8 +3,8 @@ div id="question_#{@question.id}"
   p class="mb-1"= @question.body
 
   - if @question.files.attached?
+    h6.mb-0 Attachments:
     div class="question-files mb-1"
-      h6.mb-0 Attachments:
       - @question.files.each do |file|
         p.mb-0
           = link_to file.filename.to_s, url_for(file)
@@ -13,7 +13,8 @@ div id="question_#{@question.id}"
   - if @question.links.present?
     div class="question-links mb-1"
       h6.mb-0 Links:
-      = render(partial: 'links/link', collection: @question.links, as: :link)
+      div class="question-links-list"
+        = render(partial: 'links/link', collection: @question.links, as: :link)
 
   p class="mb-1"= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 
