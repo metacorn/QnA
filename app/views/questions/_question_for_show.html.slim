@@ -11,9 +11,9 @@ div id="question_#{@question.id}"
           =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(@question)
 
   - if @question.links.present?
-    div class="question-links mb-1"
+    div id="question-#{@question.id}-links" class=" mb-1"
       h6.mb-0 Links:
-      div class="question-links-list"
+      div id="question-#{@question.id}-links-list" class="mb-1"
         = render(partial: 'links/link', collection: @question.links, as: :link)
 
   p class="mb-1"= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
