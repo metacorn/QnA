@@ -16,9 +16,8 @@ div id="answer_#{answer.id}" class="mb-3"
 
     - if answer.links.present?
       div class="answer-links mb-1"
-        - answer.links.each do |link|
-          p.mb-0
-            = link_to link.name, link.url, target: "_blank"
+        h6.mb-0 Links:
+        = render(partial: 'links/link', collection: answer.links, as: :link)
 
     p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
 

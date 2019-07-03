@@ -45,7 +45,7 @@ feature 'only authenticated user can create answers', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  scenario 'unauthenticated user tries to get an answer' do
+  scenario 'unauthenticated user tries to give an answer' do
     visit question_path(question)
     fill_in 'answer_body', with: "#{"body" * 25}"
     click_on 'Leave'
