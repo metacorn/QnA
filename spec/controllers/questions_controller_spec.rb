@@ -193,23 +193,32 @@ RSpec.describe QuestionsController, type: :controller do
     let(:user2) { create(:user) }
     let!(:question) { create(:question, user: user) }
     let!(:question2) { create(:question, user: user2) }
-    before { login(user) }
 
-    it 'deletes the question' do
-      expect {
+    context 'authenticated user' do
+      before { login(user) }
+
+      it 'deletes the question' do
+        expect {
+          delete :destroy, params: { id: question }
+        }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index' do
         delete :destroy, params: { id: question }
-      }.to change(Question, :count).by(-1)
+
+        expect(response).to redirect_to questions_path
+      end
+
+      it "tries to delete another user's question" do
+        expect {
+          delete :destroy, params: { id: question2 }
+        }.to_not change(Question, :count)
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: question }
-
-      expect(response).to redirect_to questions_path
-    end
-
-    it "tries to delete another user's question" do
+    it "unauthenticated user tries to delete another user's question" do
       expect {
-        delete :destroy, params: { id: question2 }
+        delete :destroy, params: { id: question }, format: :js
       }.to_not change(Question, :count)
     end
   end
