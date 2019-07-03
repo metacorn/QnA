@@ -1,0 +1,11 @@
+- link_number = link_counter + 1
+- if link.gist?
+  = "#{link_number}. #{link.name}"
+  div.gist
+    - link.gist_content.each do |item|
+      p.mb-0= item[:filename]
+      p.mb-0= item[:content]
+
+- else
+  => "#{link_number}."
+  = link_to link.name, link.url, target: "_blank"

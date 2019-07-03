@@ -13,9 +13,7 @@ div id="question_#{@question.id}"
   - if @question.links.present?
     div class="question-links mb-1"
       h6.mb-0 Links:
-      - @question.links.each do |link|
-        p.mb-0
-          = link_to link.name, link.url, target: "_blank"
+      = render(partial: 'links/link', collection: @question.links, as: :link)
 
   p class="mb-1"= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 

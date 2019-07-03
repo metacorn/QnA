@@ -25,6 +25,8 @@ gem 'bootstrap', '~> 4.3.1'
 gem 'google-cloud-storage', '~> 1.11', require: false
 # Nested forms
 gem 'cocoon'
+# GitHub API client
+gem "octokit", "~> 4.0"
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
