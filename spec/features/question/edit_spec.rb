@@ -9,6 +9,8 @@ feature 'user can edit his question', %q{
   given(:user2) { create(:user) }
   given(:question1) { create(:question, user: user1) }
   given(:question2) { create(:question, user: user2) }
+  given(:regular_url1) { 'https://google.com' }
+  given(:regular_url2) { 'https://yandex.com' }
 
   scenario 'unauthenticated user can not edit questions' do
     visit question_path(question1)
@@ -50,6 +52,33 @@ feature 'user can edit his question', %q{
 
         expect(page).to have_link "rails_helper.rb"
         expect(page).to have_link "spec_helper.rb"
+      end
+    end
+
+    scenario 'edits his question with adding links', js: true do
+      visit question_path(question1)
+
+      within "#question_#{question1.id}" do
+        click_on 'Edit'
+
+        click_on 'Add a link'
+
+        within '#new-links .nested-fields:nth-child(1)' do
+          fill_in 'Name', with: 'Regular URL #1'
+          fill_in 'URL', with: regular_url1
+        end
+
+        click_on 'Add a link'
+
+        within '#new-links .nested-fields:nth-child(2)' do
+          fill_in 'Name', with: 'Regular URL #2'
+          fill_in 'URL', with: regular_url2
+        end
+
+        click_on 'Update'
+
+        expect(page).to have_link 'Regular URL #1', href: regular_url1
+        expect(page).to have_link 'Regular URL #2', href: regular_url2
       end
     end
 
