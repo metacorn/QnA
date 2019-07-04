@@ -3,7 +3,10 @@ div id="answer_#{answer.id}" class="mb-3"
 
     - if answer.best?
       #best-answer
-        .font-weight-bold The best answer
+        .font-weight-bold
+          - if answer.badge.present?
+            => image_tag answer.badge.image, height: '14', class: "mb-1"
+          = 'The best answer'
 
     p.mb-1= answer.body
 

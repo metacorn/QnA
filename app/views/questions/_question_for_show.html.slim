@@ -1,5 +1,10 @@
 div id="question_#{@question.id}"
-  h4.mt-2= @question.title
+  h4 class="mt-2 mb-0"= @question.title
+  - if @question.badge.present?
+    div class="question-badge mb-1 align-text-bottom"
+      = image_tag @question.badge.image, height: '14', class: "mb-1"
+      =< "Has a badge \"#{@question.badge.name}\""
+
   p.mb-1= @question.body
 
   - if @question.files.attached?

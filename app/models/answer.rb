@@ -2,6 +2,7 @@ class Answer < ApplicationRecord
   belongs_to :user
   belongs_to :question
   has_many :links, dependent: :destroy, as: :linkable
+  has_one :badge, dependent: :destroy
 
   has_many_attached :files
 

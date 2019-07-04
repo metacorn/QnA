@@ -27,9 +27,9 @@ feature "user can delete links of his question", %q{
 
       within "#link_#{link1.id}" do
         click_on 'Delete link'
-
-        expect(page).to_not have_link link1.name
       end
+
+      expect(page).to_not have_link link1.name
     end
 
     scenario "tries to delete links of another user's question" do
