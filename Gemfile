@@ -23,6 +23,8 @@ gem 'jquery-rails'
 gem 'bootstrap', '~> 4.3.1'
 # Google Cloud Storage
 gem 'google-cloud-storage', '~> 1.11', require: false
+# Amazon AWS
+gem "aws-sdk-s3", require: false
 # Nested forms
 gem 'cocoon'
 # GitHub API client
