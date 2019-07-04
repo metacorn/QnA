@@ -2,10 +2,10 @@ div id="answer_#{answer.id}" class="mb-3"
   - if answer.persisted?
 
     - if answer.best?
-      div id="best-answer"
-        h5 The best answer
+      #best-answer
+        .font-weight-bold The best answer
 
-    p class="mb-1"= answer.body
+    p.mb-1= answer.body
 
     - if answer.files.attached?
       div class="answer-files mb-1"
@@ -15,12 +15,12 @@ div id="answer_#{answer.id}" class="mb-3"
             =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(answer)
 
     - if answer.links.present?
-      div id="answer-#{answer.id}-links" class=" mb-1"
+      div id="answer-#{answer.id}-links" class="mb-1"
         h6.mb-0 Links:
         div id="answer-#{answer.id}-links-list" class="mb-1"
           = render(partial: 'links/link', collection: answer.links, as: :link)
 
-    p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
+    p.mb-1= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     div= f.label :body, 'Your answer', class: "mb-0"

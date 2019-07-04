@@ -1,6 +1,6 @@
 div id="question_#{@question.id}"
-  h4 class="mt-2"= @question.title
-  p class="mb-1"= @question.body
+  h4.mt-2= @question.title
+  p.mb-1= @question.body
 
   - if @question.files.attached?
     h6.mb-0 Attachments:
@@ -16,7 +16,7 @@ div id="question_#{@question.id}"
       div id="question-#{@question.id}-links-list" class="mb-1"
         = render(partial: 'links/link', collection: @question.links, as: :link)
 
-  p class="mb-1"= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
+  p.mb-1= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 
   .question-errors
     =render 'shared/errors', resource: @question

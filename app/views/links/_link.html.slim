@@ -4,7 +4,7 @@ div id="link_#{link.id}"
     = "#{link_number}. #{link.name}"
     - if current_user&.owner?(link.linkable)
         =< deleting_link(link)
-    div.gist
+    .gist
       - link.gist_content.each do |item|
         p.mb-0= item[:filename]
         p.mb-0= item[:content]
