@@ -25,6 +25,14 @@ div id="answer_#{answer.id}" class="mb-3"
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     div= f.label :body, 'Your answer', class: "mb-0"
     div= f.text_area :body, cols: 32, rows: 3
+
     div= f.label :files, 'Files', class: "mb-0"
     div= f.file_field :files, multiple: true, direct_upload: true, class: "mb-3"
-    div= f.submit 'Update'
+
+    p.mb-0 Links
+    #new-links
+      = f.fields_for :links do |l|
+      .links
+        = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
+
+    .mt-2= f.submit 'Update'
