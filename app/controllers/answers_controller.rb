@@ -28,11 +28,6 @@ class AnswersController < ApplicationController
     return head :forbidden unless current_user.owner?(@answer.question)
     @answer.mark_as_best
     @question = @answer.question
-    if @question.badge.present?
-      @question.badge.answer = @answer
-      @question.badge.user = @answer.user
-      @question.badge.save
-    end
   end
 
   private

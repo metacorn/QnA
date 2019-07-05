@@ -21,7 +21,7 @@ class Badge < ApplicationRecord
 
   def validate_user_corectness
     if user && answer
-      unless answer.user == user
+      unless user.owner?(answer)
         errors.add(:user, "is not an author of an answer")
       end
     end

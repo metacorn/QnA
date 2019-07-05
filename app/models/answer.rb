@@ -20,6 +20,7 @@ class Answer < ApplicationRecord
       question.answers.best.update_all(best: false)
       self.update!(best: true)
     end
+    check_badge
   end
 
   private
@@ -34,6 +35,12 @@ class Answer < ApplicationRecord
     else
       # create
       errors.add(:best, :there_is_the_best_answer_in_question_already)
+    end
+  end
+
+  def check_badge
+    if question.badge.present?
+      question.badge.update(answer: self, user: user)
     end
   end
 end

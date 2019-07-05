@@ -17,6 +17,7 @@ RSpec.describe Answer, type: :model do
   let(:question) { create(:question, user: user) }
   let(:answer1) { create(:answer, question: question, user: user) }
   let(:answer2) { create(:answer, question: question, user: user) }
+  let!(:badge) { create(:badge, question: question) }
 
   describe '#mark_best' do
     it 'marks one answer as the best' do
@@ -24,6 +25,13 @@ RSpec.describe Answer, type: :model do
 
       expect(answer1).to be_best
       expect(answer2).to_not be_best
+    end
+
+    it 'marks one answer for question with badge as the best' do
+      answer2.mark_as_best
+
+      expect(answer2.badge).to eq badge
+      expect(user).to be_owner(badge)
     end
   end
 
