@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'byebug'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
