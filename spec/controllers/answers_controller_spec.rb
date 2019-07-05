@@ -204,6 +204,7 @@ RSpec.describe AnswersController, type: :controller do
     let!(:answer1) { create(:answer, question: question2, user: user1) }
     let!(:answer2) { create(:answer, question: question1, user: user2) }
     let!(:answer3) { create(:answer, question: question1, user: user2) }
+    let!(:badge) { create(:badge, question: question1) }
 
     context 'authenticated user' do
       before do
@@ -211,13 +212,16 @@ RSpec.describe AnswersController, type: :controller do
         answer2.best = true
       end
 
-      it 'marks answers to his question' do
+      it 'marks answers to his question (with badge)' do
         post :mark, params: { id: answer3 }, format: :js
         answer2.reload
         answer3.reload
+        badge.reload
 
         expect(answer2).to_not be_best
         expect(answer3).to be_best
+        expect(answer3.badge).to eq badge
+        expect(badge.user).to eq answer3.badge.user
       end
 
       it "tries to mark an answer to another user's question" do
