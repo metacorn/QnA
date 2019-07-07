@@ -19,8 +19,8 @@ class Answer < ApplicationRecord
     transaction do
       question.answers.best.update_all(best: false)
       self.update!(best: true)
+      reward_badge
     end
-    check_badge
   end
 
   private
@@ -38,9 +38,9 @@ class Answer < ApplicationRecord
     end
   end
 
-  def check_badge
+  def reward_badge
     if question.badge.present?
-      question.badge.update(answer: self, user: user)
+      question.badge.update!(answer: self, user: user)
     end
   end
 end
