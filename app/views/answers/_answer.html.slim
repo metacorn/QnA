@@ -2,10 +2,13 @@ div id="answer_#{answer.id}" class="mb-3"
   - if answer.persisted?
 
     - if answer.best?
-      div id="best-answer"
-        h5 The best answer
+      #best-answer
+        .font-weight-bold
+          - if answer.badge.present?
+            => image_tag answer.badge.image, height: '14', class: "mb-1"
+          = 'The best answer'
 
-    p class="mb-1"= answer.body
+    p.mb-1= answer.body
 
     - if answer.files.attached?
       div class="answer-files mb-1"
@@ -14,11 +17,25 @@ div id="answer_#{answer.id}" class="mb-3"
             = link_to file.filename.to_s, url_for(file)
             =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(answer)
 
-    p class="mb-1"= render(partial: 'shared/answer_links', locals: { answer: answer })
+    - if answer.links.present?
+      div id="answer-#{answer.id}-links" class="mb-1"
+        h6.mb-0 Links:
+        div id="answer-#{answer.id}-links-list" class="mb-1"
+          = render(partial: 'links/link', collection: answer.links, as: :link)
+
+    p.mb-1= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
     div= f.label :body, 'Your answer', class: "mb-0"
     div= f.text_area :body, cols: 32, rows: 3
+
     div= f.label :files, 'Files', class: "mb-0"
     div= f.file_field :files, multiple: true, direct_upload: true, class: "mb-3"
-    div= f.submit 'Update'
+
+    p.mb-0 Links
+    #new-links
+      = f.fields_for :links do |l|
+      .links
+        = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
+
+    .mt-2= f.submit 'Update'

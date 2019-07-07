@@ -11,4 +11,10 @@ Rails.application.routes.draw do
 
     resources :files, shallow: true, only: %i[destroy]
   end
+
+  resources :links, only: :destroy
+
+  resources :users, only: %i[] do
+    resources :badges, shallow: true, only: %i[index]
+  end
 end

@@ -1,15 +1,27 @@
 div id="question_#{@question.id}"
-  h4 class="mt-2"= @question.title
-  p class="mb-1"= @question.body
+  h4 class="mt-2 mb-0"= @question.title
+  - if @question.badge.present?
+    div class="question-badge mb-1 align-text-bottom"
+      = image_tag @question.badge.image, height: '14', class: "mb-1"
+      =< "Has a badge \"#{@question.badge.name}\""
+
+  p.mb-1= @question.body
 
   - if @question.files.attached?
+    h6.mb-0 Attachments:
     div class="question-files mb-1"
       - @question.files.each do |file|
         p.mb-0
           = link_to file.filename.to_s, url_for(file)
           =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(@question)
 
-  p class="mb-1"= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
+  - if @question.links.present?
+    div id="question-#{@question.id}-links" class=" mb-1"
+      h6.mb-0 Links:
+      div id="question-#{@question.id}-links-list" class="mb-1"
+        = render(partial: 'links/link', collection: @question.links, as: :link)
+
+  p.mb-1= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 
   .question-errors
     =render 'shared/errors', resource: @question
@@ -17,8 +29,17 @@ div id="question_#{@question.id}"
   = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
     div= f.label :title, class: "mb-0"
     div= f.text_field :title, size: 29, class: "mb-2"
+
     div= f.label :body, 'Body', class: "mb-0"
     div= f.text_area :body, cols: 32, rows: 3
+
     div= f.label :files, 'Files', class: "mb-0"
-    div= f.file_field :files, multiple: true, direct_upload: true, class: "mb-3"
+    div= f.file_field :files, multiple: true, class: "mb-2"
+
+    p.mb-0 Links
+    #new-links
+      = f.fields_for :links do |l|
+      .links
+        = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
+
     div= f.submit 'Update'

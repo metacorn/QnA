@@ -1,11 +1,25 @@
 = render 'shared/errors', resource: @question
 
 = form_with model: @question, local: true do |f|
-  div class="form-group"
-    div= f.label :title, class: "mb-0"
-    div= f.text_field :title, size: 29, class: "mb-2"
-    div= f.label :body, 'Body', class: "mb-0"
-    div= f.text_area :body, cols: 32, rows: 3
-    div= f.label :files, 'Files', class: "mb-0"
-    div= f.file_field :files, multiple: true, class: "mb-3"
-    div= f.submit 'Ask'
+  div= f.label :title, class: "mb-0"
+  div= f.text_field :title, size: 29, class: "mb-2"
+
+  div= f.label :body, 'Body', class: "mb-0"
+  div= f.text_area :body, cols: 32, rows: 3
+
+  div= f.label :files, 'Files', class: "mb-0"
+  div= f.file_field :files, multiple: true, class: "mb-2"
+
+  p.mb-0 Links
+  #new-links
+    = f.fields_for :links do |l|
+    .links
+      = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
+
+  p.mb-0 Badge
+  #new-badge
+    = f.fields_for :badge do |b|
+    .badges
+      = link_to_add_association 'Set a badge', f, :badge, partial: 'badges/badge_fields'
+
+  .mt-2= f.submit 'Ask'

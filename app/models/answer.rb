@@ -1,8 +1,12 @@
 class Answer < ApplicationRecord
   belongs_to :user
   belongs_to :question
+  has_many :links, dependent: :destroy, as: :linkable
+  has_one :badge, dependent: :destroy
 
   has_many_attached :files
+
+  accepts_nested_attributes_for :links, reject_if: :all_blank
 
   default_scope { order(best: :desc, created_at: :asc) }
   scope :best, -> { where(best: true) }
@@ -15,6 +19,7 @@ class Answer < ApplicationRecord
     transaction do
       question.answers.best.update_all(best: false)
       self.update!(best: true)
+      reward_badge
     end
   end
 
@@ -30,6 +35,12 @@ class Answer < ApplicationRecord
     else
       # create
       errors.add(:best, :there_is_the_best_answer_in_question_already)
+    end
+  end
+
+  def reward_badge
+    if question.badge.present?
+      question.badge.update!(answer: self, user: user)
     end
   end
 end

@@ -1,0 +1,6 @@
+<% div_id = "#{@link.linkable.class.to_s.downcase}-#{@link.linkable.id}" %>
+<% if @links.present? %>
+  $("#<%= div_id %>" + "-links-list").html('<%= render(partial: 'links/link', collection: @links, as: :link) %>')
+<% else %>
+  $("#<%= div_id %>" + "-links").remove()
+<% end %>

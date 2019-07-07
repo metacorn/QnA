@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'byebug'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
@@ -26,6 +25,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
+    it 'assigns new links to @answer.links' do
+      expect(assigns(:answer).links.first).to be_a_new(Link)
+    end
+
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -37,6 +40,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'assigns new links to @question.links' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
     end
 
     it 'renders new view' do
@@ -185,23 +192,32 @@ RSpec.describe QuestionsController, type: :controller do
     let(:user2) { create(:user) }
     let!(:question) { create(:question, user: user) }
     let!(:question2) { create(:question, user: user2) }
-    before { login(user) }
 
-    it 'deletes the question' do
-      expect {
+    context 'authenticated user' do
+      before { login(user) }
+
+      it 'deletes the question' do
+        expect {
+          delete :destroy, params: { id: question }
+        }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index' do
         delete :destroy, params: { id: question }
-      }.to change(Question, :count).by(-1)
+
+        expect(response).to redirect_to questions_path
+      end
+
+      it "tries to delete another user's question" do
+        expect {
+          delete :destroy, params: { id: question2 }
+        }.to_not change(Question, :count)
+      end
     end
 
-    it 'redirects to index' do
-      delete :destroy, params: { id: question }
-
-      expect(response).to redirect_to questions_path
-    end
-
-    it "tries to delete another user's question" do
+    it "unauthenticated user tries to delete another user's question" do
       expect {
-        delete :destroy, params: { id: question2 }
+        delete :destroy, params: { id: question }, format: :js
       }.to_not change(Question, :count)
     end
   end

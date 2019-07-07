@@ -18,9 +18,12 @@ feature 'user can mark one answer as the best', %q{
   describe 'authenticated user', js: true do
     given(:user2) { create(:user) }
     given(:question2) { create(:question, user: user2) }
+    given(:question3) { create(:question, user: user1) }
     given!(:answer1) { create(:answer, question: question2, user: user1) }
     given!(:answer2) { create(:answer, question: question1, user: user2) }
     given!(:answer3) { create(:answer, question: question1, user: user2) }
+    given!(:answer4) { create(:answer, question: question3, user: user2) }
+    given!(:badge) { create(:badge, question: question1) }
 
     background do
       login(user1)
@@ -79,7 +82,30 @@ feature 'user can mark one answer as the best', %q{
       best_answer_el = find("#answer_#{lower_answer.id}")
       regular_answer_el = find("#answer_#{upper_answer.id}")
 
+      best_answer_el.reload
+      regular_answer_el.reload
+
       expect(best_answer_el.path).to be < regular_answer_el.path
+    end
+
+    scenario 'marks an answer to his question (with a badge)' do
+      visit question_path(question1)
+
+      within "#answer_#{answer2.id}" do
+        click_on 'Mark as the best'
+
+        expect(page).to have_css "img[src*='badge.png']"
+      end
+    end
+
+    scenario 'marks an answer to his question (without a badge)' do
+      visit question_path(question3)
+
+      within "#answer_#{answer4.id}" do
+        click_on 'Mark as the best'
+
+        expect(page).to_not have_css "img[src*='badge.png']"
+      end
     end
   end
 end

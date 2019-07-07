@@ -211,7 +211,7 @@ RSpec.describe AnswersController, type: :controller do
         answer2.best = true
       end
 
-      it 'marks answers to his question' do
+      it 'marks answers to his question (with badge)' do
         post :mark, params: { id: answer3 }, format: :js
         answer2.reload
         answer3.reload
