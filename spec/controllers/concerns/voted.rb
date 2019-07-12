@@ -21,6 +21,14 @@ RSpec.shared_examples_for "voted" do
           post :vote_up, params: { id: question1.id }, format: :json
         }.to_not change(question1, :rating)
       end
+
+      it "tries to vote for another's user question twice" do
+        post :vote_up, params: { id: question2.id }, format: :json
+
+        expect {
+          post :vote_up, params: { id: question2.id }, format: :json
+        }.to_not change(question2, :rating)
+      end
     end
 
     context 'unauthenticated user' do
@@ -46,6 +54,14 @@ RSpec.shared_examples_for "voted" do
         expect {
           post :vote_down, params: { id: question1.id }, format: :json
         }.to_not change(question1, :rating)
+      end
+
+      it "tries to vote against another's user question twice" do
+        post :vote_down, params: { id: question2.id }, format: :json
+
+        expect {
+          post :vote_down, params: { id: question2.id }, format: :json
+        }.to_not change(question2, :rating)
       end
     end
 

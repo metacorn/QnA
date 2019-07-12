@@ -58,5 +58,25 @@ feature 'user can vote for questions', %q{
         expect(page).to_not have_link "down"
       end
     end
+
+    scenario "tries to vote for another user's question twice", js: true do
+      visit question_path(question2)
+
+      within "#question_#{question2.id}" do
+        click_on 'up'
+
+        expect(page).to_not have_link 'up'
+      end
+    end
+
+    scenario "tries to vote against another user's question twice", js: true do
+      visit question_path(question2)
+
+      within "#question_#{question2.id}" do
+        click_on 'down'
+
+        expect(page).to_not have_link 'down'
+      end
+    end
   end
 end

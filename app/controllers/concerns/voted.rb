@@ -14,7 +14,9 @@ module Voted
   def vote!(kind)
     model_klass = controller_name.classify.constantize
     votable = model_klass.find(params[:id])
+
     return head :forbidden if current_user.owner?(votable)
+
     vote = votable.votes.new(user: current_user, votable: votable, kind: kind)
 
     respond_to do |format|

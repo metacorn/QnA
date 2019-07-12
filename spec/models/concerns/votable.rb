@@ -5,7 +5,7 @@ RSpec.shared_examples_for "votable" do
 
   let(:model) { described_class }
   (1..4).each { |i| let("user#{i}".to_sym) { create(:user) } }
-  let(:votable) { create(model.to_s.underscore.to_sym, user: user1) }
+  let(:votable) { build(model.to_s.underscore.to_sym, user: user1) }
 
   describe '#rating' do
     let!(:vote_positive1) { create(:vote, :positive, votable: votable, user: user2) }
