@@ -1,21 +1,28 @@
 => 'Votes:'
 - if current_user
-  - if votable.votes.by_user(current_user).first&.kind == "negative"
-    span.font-weight-bold=> 'down'
+  - if current_user.owner?(votable)
+    span class="vote-down text-muted"=> 'down'
+  - elsif votable.votes.by_user(current_user).first&.kind == "negative"
+    span class="vote-down font-weight-bold"=> 'down'
   - elsif votable.votes.by_user(current_user).first&.kind == "positive"
-    span.font-weight-light=> 'down'
+    span class="vote-down"=> 'down'
   - else
-    => link_to('down', polymorphic_path([:vote_down, votable]), method: :post, remote: true, data: { type: :json, kind: :negative })
+    span.vote-down
+      => link_to('down', polymorphic_path([:vote_down, votable]), method: :post, remote: true, data: { type: :json, kind: :negative })
 
 span.rating=> votable.rating
 
 - if current_user
-  - if votable.votes.by_user(current_user).first&.kind == "positive"
-    span.font-weight-bold=> 'up'
+  - if current_user.owner?(votable)
+    span class="vote-up text-muted"=> 'up'
+  - elsif votable.votes.by_user(current_user).first&.kind == "positive"
+    span class="vote-up font-weight-bold"=> 'up'
   - elsif votable.votes.by_user(current_user).first&.kind == "negative"
-    span.font-weight-light=> 'up'
+    span class="vote-up"=> 'up'
   - else
-    => link_to('up', polymorphic_path([:vote_up, votable]), method: :post, remote: true, data: { type: :json, kind: :positive })
+    span.vote-up
+      => link_to('up', polymorphic_path([:vote_up, votable]), method: :post, remote: true, data: { type: :json, kind: :positive })
 
-- if votable.votes.by_user(current_user).first
-  = button_to('Cancel your vote', '#', class: "btn btn-secondary btn-sm")
+span.cancel-vote-link
+  - if votable.votes.by_user(current_user).first
+    = link_to('Cancel', '#')

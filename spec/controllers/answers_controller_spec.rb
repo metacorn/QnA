@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'byebug'
 
 RSpec.describe AnswersController, type: :controller do
+
   let(:user1) { create(:user) }
   let(:question1) { create(:question, user: user1) }
 

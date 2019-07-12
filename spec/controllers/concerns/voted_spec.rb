@@ -15,6 +15,12 @@ RSpec.shared_examples_for "voted" do
           post :vote_up, params: { id: question2.id }, format: :json
         }.to change(question2, :rating).by(1)
       end
+
+      it "tries to vote for his own question" do
+        expect {
+          post :vote_up, params: { id: question1.id }, format: :json
+        }.to_not change(question1, :rating)
+      end
     end
 
     context 'unauthenticated user' do
@@ -34,6 +40,12 @@ RSpec.shared_examples_for "voted" do
         expect {
           post :vote_down, params: { id: question2.id }, format: :json
         }.to change(question2, :rating).by(-1)
+      end
+
+      it "tries to vote against his own question" do
+        expect {
+          post :vote_down, params: { id: question1.id }, format: :json
+        }.to_not change(question1, :rating)
       end
     end
 
