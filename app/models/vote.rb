@@ -6,7 +6,7 @@ class Vote < ApplicationRecord
 
   scope :positive, -> { where(kind: 'positive') }
   scope :negative, -> { where(kind: 'negative') }
-  scope :by_user, -> (user) { where('user_id = ?', user.id) }
+  scope :by_user, -> (user) { where('user_id = ?', user&.id) }
 
   validate :validate_only_one_users_vote
 

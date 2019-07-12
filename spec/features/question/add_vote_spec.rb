@@ -14,7 +14,7 @@ feature 'user can vote for questions', %q{
     visit question_path(question1)
 
     within "#question_#{question1.id}" do
-      expect(page).to_not have_link "Vote"
+      expect(page).to_not have_link "up"
     end
   end
 
@@ -27,11 +27,11 @@ feature 'user can vote for questions', %q{
       visit question_path(question2)
 
       within "#question_#{question2.id}" do
-        expect(page).to have_content 'Votes: - 0 +'
+        expect(page).to have_content 'Votes: down 0 up'
 
-        click_on '+'
+        click_on 'up'
 
-        expect(page).to have_content 'Votes: - 1 +'
+        expect(page).to have_content 'Votes: down 1 up'
       end
     end
   end
