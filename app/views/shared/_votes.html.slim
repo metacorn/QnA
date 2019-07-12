@@ -1,0 +1,19 @@
+=> 'Votes:'
+
+- if votable.votes.by_user(current_user).first&.kind == "negative"
+  span.font-weight-bold=> 'down'
+- elsif votable.votes.by_user(current_user).first&.kind == "positive"
+  span.font-weight-light=> 'down'
+- else
+  => link_to('down', polymorphic_path([:vote_down, votable]), method: :post, remote: true, data: { type: :json, kind: :negative })
+
+span.rating=> votable.rating
+
+- if votable.votes.by_user(current_user).first&.kind == "positive"
+  span.font-weight-bold=> 'up'
+- elsif votable.votes.by_user(current_user).first&.kind == "negative"
+  span.font-weight-light=> 'up'
+- else
+  => link_to('up', polymorphic_path([:vote_up, votable]), method: :post, remote: true, data: { type: :json, kind: :positive })
+
+= button_to('Cancel your vote', '#', class: "btn btn-secondary btn-sm") if votable.votes.by_user(current_user).first
