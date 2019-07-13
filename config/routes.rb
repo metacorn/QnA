@@ -2,21 +2,19 @@ Rails.application.routes.draw do
   devise_for :users
   root to: "questions#index"
 
-  resources :questions do
-    resources :answers, shallow: true, except: %i[index show] do
-      member do
-        post :mark
-      end
-
-      member do
-        post :vote_up
-        post :vote_down
-      end
-    end
-
+  concern :votable do
     member do
       post :vote_up
       post :vote_down
+      delete :cancel_vote
+    end
+  end
+
+  resources :questions, concerns: [:votable] do
+    resources :answers, concerns: [:votable], shallow: true, except: %i[index show] do
+      member do
+        post :mark
+      end
     end
 
     resources :files, shallow: true, only: %i[destroy]

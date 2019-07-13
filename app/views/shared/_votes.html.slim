@@ -5,10 +5,10 @@
   - elsif votable.votes.by_user(current_user).first&.kind == "negative"
     span class="vote-down font-weight-bold"=> 'down'
   - elsif votable.votes.by_user(current_user).first&.kind == "positive"
-    span class="vote-down"=> 'down'
+    span class="vote-down text-muted"=> 'down'
   - else
     span.vote-down
-      => link_to('down', polymorphic_path([:vote_down, votable]), method: :post, remote: true, data: { type: :json, kind: :negative })
+      => link_to('down', polymorphic_path([:vote_down, votable]), method: :post, remote: true, data: { type: :json })
 
 span.rating=> votable.rating
 
@@ -18,11 +18,11 @@ span.rating=> votable.rating
   - elsif votable.votes.by_user(current_user).first&.kind == "positive"
     span class="vote-up font-weight-bold"=> 'up'
   - elsif votable.votes.by_user(current_user).first&.kind == "negative"
-    span class="vote-up"=> 'up'
+    span class="vote-up text-muted"=> 'up'
   - else
     span.vote-up
-      => link_to('up', polymorphic_path([:vote_up, votable]), method: :post, remote: true, data: { type: :json, kind: :positive })
+      => link_to('up', polymorphic_path([:vote_up, votable]), method: :post, remote: true, data: { type: :json })
 
-span.cancel-vote-link
+span.cancel-vote
   - if votable.votes.by_user(current_user).first
-    = link_to('Cancel', '#')
+    = link_to('Cancel', polymorphic_path([:cancel_vote, votable]), method: :delete, remote: true, data: { type: :json } )

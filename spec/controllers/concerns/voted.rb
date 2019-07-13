@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.shared_examples_for "voted" do
   let(:user1) { create(:user) }
   let(:user2) { create(:user) }
-  let(:question1) { create(:question, user: user1) }
-  let(:question2) { create(:question, user: user2) }
+  let!(:question1) { create(:question, user: user1) }
+  let!(:question2) { create(:question, user: user2) }
 
   describe 'POST #vote_up' do
     context 'authenticated user' do
@@ -69,6 +69,35 @@ RSpec.shared_examples_for "voted" do
       it "tries to vote against someone's question" do
         expect {
           post :vote_up, params: { id: question1.id }, format: :json
+        }.to_not change(question1, :rating)
+      end
+    end
+  end
+
+  describe 'DELETE #cancel_vote' do
+    let!(:vote1) { create(:vote, votable: question1, user: user1, kind: 'positive') }
+    let!(:vote2) { create(:vote, votable: question2, user: user2, kind: 'positive') }
+
+    context 'authenticated user' do
+      before { login user1 }
+
+      it "cancels his vote" do
+        expect {
+          delete :cancel_vote, params: { id: question1.id }, format: :json
+        }.to change(question1, :rating).by(-1)
+      end
+
+      it "does not cancel another user's vote" do
+        expect {
+          delete :cancel_vote, params: { id: question2.id }, format: :json
+        }.to_not change(question2, :rating)
+      end
+    end
+
+    context 'unauthenticated user' do
+      it "does not cancel anyone's vote" do
+        expect {
+          delete :cancel_vote, params: { id: question1.id }, format: :json
         }.to_not change(question1, :rating)
       end
     end

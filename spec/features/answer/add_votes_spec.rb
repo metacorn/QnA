@@ -60,5 +60,17 @@ feature 'user can vote for answers', %q{
         expect(page).to_not have_link "down"
       end
     end
+
+    scenario "votes, cancels his vote and then revotes", js: true do
+      visit question_path(question1)
+
+      within "#answer_#{answer1.id}" do
+        click_on 'up'
+        click_on 'Cancel'
+        click_on 'down'
+
+        expect(page).to have_content 'Votes: down -1 up'
+      end
+    end
   end
 end
