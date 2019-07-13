@@ -75,22 +75,26 @@ RSpec.shared_examples_for "voted" do
   end
 
   describe 'DELETE #cancel_vote' do
-    let!(:vote1) { create(:vote, votable: question1, user: user1, kind: 'positive') }
-    let!(:vote2) { create(:vote, votable: question2, user: user2, kind: 'positive') }
+    let(:question3) { create(:question, user: user2) }
+    let(:user3) { create(:user) }
+    let!(:vote1) { create(:vote, votable: question2, user: user1, kind: 'positive') }
+    let!(:vote2) { create(:vote, votable: question3, user: user3, kind: 'positive') }
 
     context 'authenticated user' do
       before { login user1 }
 
       it "cancels his vote" do
         expect {
-          delete :cancel_vote, params: { id: question1.id }, format: :json
-        }.to change(question1, :rating).by(-1)
+          delete :cancel_vote, params: { id: question2.id }, format: :json
+        }.to change(question2, :rating).by(-1)
+
+        expect { vote1.reload }.to raise_exception(ActiveRecord::RecordNotFound)
       end
 
       it "does not cancel another user's vote" do
         expect {
-          delete :cancel_vote, params: { id: question2.id }, format: :json
-        }.to_not change(question2, :rating)
+          delete :cancel_vote, params: { id: question3.id }, format: :json
+        }.to_not change(question3, :rating)
       end
     end
 
