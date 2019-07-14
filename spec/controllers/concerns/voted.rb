@@ -77,8 +77,8 @@ RSpec.shared_examples_for "voted" do
   describe 'DELETE #cancel_vote' do
     let(:question3) { create(:question, user: user2) }
     let(:user3) { create(:user) }
-    let!(:vote1) { create(:vote, votable: question2, user: user1, kind: 'positive') }
-    let!(:vote2) { create(:vote, votable: question3, user: user3, kind: 'positive') }
+    let!(:vote1) { create(:vote, votable: question2, user: user1, value: 1) }
+    let!(:vote2) { create(:vote, votable: question3, user: user3, value: 1) }
 
     context 'authenticated user' do
       before { login user1 }

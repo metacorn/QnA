@@ -8,7 +8,7 @@ module Votable
   end
 
   def rating
-    votes.positive.count - votes.negative.count
+    votes.sum(:value)
   end
 
   private

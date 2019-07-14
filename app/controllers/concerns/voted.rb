@@ -6,11 +6,11 @@ module Voted
   end
 
   def vote_up
-    vote!(:positive)
+    vote!(1)
   end
 
   def vote_down
-    vote!(:negative)
+    vote!(-1)
   end
 
   def cancel_vote
@@ -40,14 +40,14 @@ module Voted
     @votable = model_klass.find(params[:id])
   end
 
-  def vote!(kind)
+  def vote!(value)
     return head :forbidden if current_user.owner?(@votable)
-    vote = @votable.votes.new(user: current_user, votable: @votable, kind: kind)
+    vote = @votable.votes.new(user: current_user, votable: @votable, value: value)
 
     respond_to do |format|
       if vote.save
-        down_vote_state = (kind == :positive ? 'inactive' : 'highlighted')
-        up_vote_state = (kind == :negative ? 'inactive' : 'highlighted')
+        down_vote_state = (value == 1 ? 'inactive' : 'highlighted')
+        up_vote_state = (value == -1 ? 'inactive' : 'highlighted')
 
         format.json { render json: {
           down_vote_state: down_vote_state,

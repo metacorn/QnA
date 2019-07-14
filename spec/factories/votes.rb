@@ -4,11 +4,11 @@ FactoryBot.define do
     association :votable, factory: :question
 
     trait :positive do
-      kind { :positive }
+      value { 1 }
     end
 
     trait :negative do
-      kind { :negative }
+      value { -1 }
     end
   end
 end
