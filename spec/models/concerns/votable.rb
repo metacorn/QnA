@@ -29,4 +29,24 @@ RSpec.shared_examples_for "votable" do
       expect(votable.cancel_vote_of(user5)).to eq false
     end
   end
+
+  describe '#liked?(user)' do
+    it 'returns true for existing positive vote of passing user' do
+      expect(votable.liked?(user2)).to eq true
+    end
+
+    it 'returns false for non existing positive vote of passing user' do
+      expect(votable.liked?(user5)).to eq false
+    end
+  end
+
+  describe '#disliked?(user)' do
+    it 'returns true for existing negative vote of passing user' do
+      expect(votable.disliked?(user4)).to eq true
+    end
+
+    it 'returns false for non existing negative vote of passing user' do
+      expect(votable.disliked?(user5)).to eq false
+    end
+  end
 end

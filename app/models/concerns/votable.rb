@@ -13,4 +13,12 @@ module Votable
   def rating
     votes.sum(:value)
   end
+
+  def liked?(user)
+    votes.by_user(user).first&.value == 1
+  end
+
+  def disliked?(user)
+    votes.by_user(user).first&.value == -1
+  end
 end

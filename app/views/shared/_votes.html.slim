@@ -2,9 +2,9 @@
 - if current_user
   - if current_user.owner?(votable)
     span class="vote-down text-muted"=> 'down'
-  - elsif votable.votes.by_user(current_user).first&.value == -1
+  - elsif votable.disliked?(current_user)
     span class="vote-down font-weight-bold"=> 'down'
-  - elsif votable.votes.by_user(current_user).first&.value == 1
+  - elsif votable.liked?(current_user)
     span class="vote-down text-muted"=> 'down'
   - else
     span.vote-down
@@ -15,9 +15,9 @@ span.rating=> votable.rating
 - if current_user
   - if current_user.owner?(votable)
     span class="vote-up text-muted"=> 'up'
-  - elsif votable.votes.by_user(current_user).first&.value == 1
+  - elsif votable.liked?(current_user)
     span class="vote-up font-weight-bold"=> 'up'
-  - elsif votable.votes.by_user(current_user).first&.value == -1
+  - elsif votable.disliked?(current_user)
     span class="vote-up text-muted"=> 'up'
   - else
     span.vote-up
