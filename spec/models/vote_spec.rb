@@ -13,25 +13,21 @@ RSpec.describe Vote, type: :model do
   let!(:vote4) { create(:vote, :negative, votable: votable, user: user4) }
   let!(:vote5) { create(:vote, :negative, votable: votable, user: user5) }
 
-  describe 'positive scope' do
-    it 'returns only positive votes' do
-      expect(votable.votes.where(value: '1')).to match_array([vote1, vote2])
+  describe 'Vote.like' do
+    let!(:vote) { Vote.like }
+
+    it 'returns instance with .value = 1' do
+      expect(vote).to be_a(Vote)
+      expect(vote.value).to eq 1
     end
   end
 
-  describe 'negative scope' do
-    it 'returns only negative votes' do
-      expect(votable.votes.where(value: '-1')).to match_array([vote3, vote4, vote5])
-    end
-  end
+  describe 'Vote.dislike' do
+    let!(:vote) { Vote.dislike }
 
-  describe 'negative scope' do
-    it 'returns only users vote' do
-      expect(votable.votes.by_user(user1)).to match_array([vote1])
-      expect(votable.votes.by_user(user2)).to match_array([vote2])
-      expect(votable.votes.by_user(user3)).to match_array([vote3])
-      expect(votable.votes.by_user(user4)).to match_array([vote4])
-      expect(votable.votes.by_user(user5)).to match_array([vote5])
+    it 'returns instance with .value = -1' do
+      expect(vote).to be_a(Vote)
+      expect(vote.value).to eq -1
     end
   end
 end

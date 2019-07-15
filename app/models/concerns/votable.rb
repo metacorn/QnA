@@ -3,17 +3,14 @@ module Votable
 
   included do
     has_many :votes, as: :votable, dependent: :destroy
+  end
 
-    validate :validate_rating_is_integer
+  def cancel_vote_of(user)
+    vote = votes.by_user(user)
+    (vote.any?) ? vote.destroy_all : false
   end
 
   def rating
     votes.sum(:value)
-  end
-
-  private
-
-  def validate_rating_is_integer
-    errors.add(:rating, "is not integer") unless rating.instance_of?(Integer)
   end
 end
