@@ -1,0 +1,12 @@
+=> 'Votes:'
+- if current_user
+  = render(partial: 'votes/down_vote_link', locals: { votable: votable })
+
+span.rating=> votable.rating
+
+- if current_user
+  = render(partial: 'votes/up_vote_link', locals: { votable: votable })
+
+span.cancel-vote
+  - if votable.liked?(current_user) || votable.disliked?(current_user)
+    = link_to('Cancel', polymorphic_path([:cancel_vote, votable]), method: :delete, remote: true, data: { type: :json } )

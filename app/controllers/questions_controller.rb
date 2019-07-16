@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  include Voted
+
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show edit update destroy]
 
@@ -52,6 +54,6 @@ class QuestionsController < ApplicationController
                                       :body,
                                       files: [],
                                       links_attributes: [:name, :url],
-                                      badge_attributes: [:name, :image])
+                                      badge_attributes: [:name, :image] )
   end
 end

@@ -21,6 +21,9 @@ div id="question_#{@question.id}"
       div id="question-#{@question.id}-links-list" class="mb-1"
         = render(partial: 'links/link', collection: @question.links, as: :link)
 
+  .votes
+    = render(partial: 'votes/rating', locals: { votable: @question })
+
   p.mb-1= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 
   .question-errors

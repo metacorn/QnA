@@ -23,6 +23,9 @@ div id="answer_#{answer.id}" class="mb-3"
         div id="answer-#{answer.id}-links-list" class="mb-1"
           = render(partial: 'links/link', collection: answer.links, as: :link)
 
+    .votes
+      = render(partial: 'votes/rating', locals: { votable: answer })
+
     p.mb-1= render(partial: 'shared/answer_links', locals: { answer: answer })
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
