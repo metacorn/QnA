@@ -10,35 +10,23 @@ $(document).on('ajax:success', '.votes', function(e) {
 
   // down vote span
   if (response.down_vote_state == 'active') {
-    downVoteSpan.removeClass('text-muted')
-    downVoteSpan.removeClass('font-weight-bold')
-    downVoteSpan.html(downVoteLinkTag()).append(' ')
+    setVoteSpanActive(downVoteSpan)
   } else if (response.down_vote_state == 'highlighted') {
-    downVoteSpan.addClass('font-weight-bold')
-    downVoteSpan.removeClass('text-muted')
-    downVoteSpan.html('down').append(' ')
+    setVoteSpanHighlited(downVoteSpan)
   } else if (response.down_vote_state == 'inactive') {
-    downVoteSpan.addClass('text-muted')
-    downVoteSpan.removeClass('font-weight-bold')
-    downVoteSpan.html('down').append(' ')
+    setVoteSpanInactive(downVoteSpan)
   }
 
-  // response.rating span
+  // rating span
   ratingSpan.html(response.rating)
 
   // up vote span
   if (response.up_vote_state == 'active') {
-    upVoteSpan.removeClass('text-muted')
-    upVoteSpan.removeClass('font-weight-bold')
-    upVoteSpan.html(upVoteLinkTag()).append(' ')
+    setVoteSpanActive(upVoteSpan)
   } else if (response.up_vote_state == 'highlighted') {
-    upVoteSpan.addClass('font-weight-bold')
-    upVoteSpan.removeClass('text-muted')
-    upVoteSpan.html('up').append(' ')
+    setVoteSpanHighlited(upVoteSpan)
   } else if (response.up_vote_state == 'inactive') {
-    upVoteSpan.addClass('text-muted')
-    upVoteSpan.removeClass('font-weight-bold')
-    upVoteSpan.html('up').append(' ')
+    setVoteSpanInactive(upVoteSpan)
   }
 
   // cancel vote span
@@ -49,15 +37,40 @@ $(document).on('ajax:success', '.votes', function(e) {
   }
 
   // functions
-  function upVoteLinkTag() {
-    return '<a data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/' + response.votable_controller + '/' + response.votable_id + '/vote_up">up</a>'
-  }
-
-  function downVoteLinkTag() {
-    return '<a data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/' + response.votable_controller + '/' + response.votable_id + '/vote_down">down</a>'
-  }
-
   function cancelVoteLinkTag() {
     return '<a data-type="json" data-remote="true" rel="nofollow" data-method="delete" href="/' + response.votable_controller + '/' + response.votable_id + '/cancel_vote">Cancel</a>'
+  }
+
+  function voteLinkTag(voteKind) {
+    return '<a data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/' + response.votable_controller + '/' + response.votable_id + '/vote_' + voteKind + '">' + voteKind + '</a>'
+  }
+
+  function setVoteSpanActive(span) {
+    span.removeClass('text-muted')
+    span.removeClass('font-weight-bold')
+    var voteKind = setVoteKind(span)
+    span.html(voteLinkTag(voteKind)).append(' ')
+  }
+
+  function setVoteSpanHighlited(span) {
+    span.addClass('font-weight-bold')
+    span.removeClass('text-muted')
+    var voteKind = setVoteKind(span)
+    span.html(voteKind).append(' ')
+  }
+
+  function setVoteSpanInactive(span) {
+    span.addClass('text-muted')
+    span.removeClass('font-weight-bold')
+    var voteKind = setVoteKind(span)
+    span.html(voteKind).append(' ')
+  }
+
+  function setVoteKind(span) {
+    if (span == downVoteSpan) {
+      return 'down'
+    } else if (span == upVoteSpan) {
+      return 'up'
+    }
   }
 })
