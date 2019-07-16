@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Vote, type: :model do
   it { should belong_to :votable }
   it { should belong_to :user }
-  it { should validate_uniqueness_of(:user).scoped_to(:votable_id).with_message('user has already voted for/against this resource') }
+  it { should validate_uniqueness_of(:user).scoped_to([:votable_type, :votable_id]).with_message('user has already voted for/against this resource') }
 
   (1..6).each { |i| let("user#{i}".to_sym) { create(:user) } }
   let(:votable) { create(:question, user: user6) }
