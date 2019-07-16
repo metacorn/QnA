@@ -22,7 +22,7 @@ div id="question_#{@question.id}"
         = render(partial: 'links/link', collection: @question.links, as: :link)
 
   .votes
-    = render(partial: 'shared/votes', locals: { votable: @question })
+    = render(partial: 'votes/rating', locals: { votable: @question })
 
   p.mb-1= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
 

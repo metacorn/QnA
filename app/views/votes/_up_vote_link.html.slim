@@ -1,0 +1,9 @@
+- if current_user.owner?(votable)
+  span class="vote-up text-muted"=> 'up'
+- elsif votable.liked?(current_user)
+  span class="vote-up font-weight-bold"=> 'up'
+- elsif votable.disliked?(current_user)
+  span class="vote-up text-muted"=> 'up'
+- else
+  span.vote-up
+    => link_to('up', polymorphic_path([:vote_up, votable]), method: :post, remote: true, data: { type: :json })

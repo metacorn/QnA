@@ -24,7 +24,7 @@ div id="answer_#{answer.id}" class="mb-3"
           = render(partial: 'links/link', collection: answer.links, as: :link)
 
     .votes
-      = render(partial: 'shared/votes', locals: { votable: answer })
+      = render(partial: 'votes/rating', locals: { votable: answer })
 
     p.mb-1= render(partial: 'shared/answer_links', locals: { answer: answer })
 
