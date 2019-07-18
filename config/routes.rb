@@ -25,4 +25,6 @@ Rails.application.routes.draw do
   resources :users, only: %i[] do
     resources :badges, shallow: true, only: %i[index]
   end
+
+  mount ActionCable.server, at: '/cable'
 end

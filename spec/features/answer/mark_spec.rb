@@ -85,6 +85,8 @@ feature 'user can mark one answer as the best', %q{
       best_answer_el.reload
       regular_answer_el.reload
 
+      sleep(2)
+
       expect(best_answer_el.path).to be < regular_answer_el.path
     end
 

@@ -1,0 +1,39 @@
+div id="answer_#{@answer.id}" class="mb-3"
+  p.mb-1= @answer.body
+
+  - if @files.length
+    div class="answer-files mb-1"
+      - for f in @files
+        p.mb-0
+          a href="#{f.url}" = f.name
+
+  - if @links.length
+    div id="answer-#{@answer.id}-links" class="mb-1"
+      h6.mb-0 Links:
+      div id="answer-#{@answer.id}-links-list" class="mb-1"
+        - for l in @links
+          div id="link_#{l.id}"
+            - if l.gist_content != ""
+              = "#{l.number}. #{l.name}"
+              .gist
+                - for i in l.gist_content
+                  p.mb-0= i.filename
+                  p.mb-0= i.content
+            - else
+              => "#{l.number}."
+              a href="#{l.url}" target="_blank" = l.name
+
+  .votes
+    => "Votes:"
+    - if gon.user_id
+      span.vote-down
+        a data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_down" => "down"
+    span.rating=> "0"
+    - if gon.user_id
+      span.vote-up
+        a data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_up" => "up"
+    span.cancel-vote
+
+  p.mb-1=
+  - if gon.user_id == gon.question_user_id
+    a data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/mark" => "Mark as the best"

@@ -53,3 +53,34 @@ feature 'only authenticated user can create answers', %q{
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 end
+
+feature 'created answers shows up at once', %q{
+  in order to communicate interactively
+  i'd like to see users answers right after their creating
+  without refreshing question page
+} do
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
+
+  scenario "all users see new answer in real-time", js: true do
+    Capybara.using_session("user") do
+      login(user)
+      visit question_path(question)
+    end
+
+    Capybara.using_session("guest") do
+      visit question_path(question)
+    end
+
+    Capybara.using_session("user") do
+      fill_in 'answer_body', with: "#{"body" * 25}"
+      click_on 'Leave'
+
+      expect(page).to have_content "#{"body" * 25}"
+    end
+
+    Capybara.using_session("guest") do
+      expect(page).to have_content "#{"body" * 25}"
+    end
+  end
+end

@@ -1,0 +1,10 @@
+class AnswersChannel < ApplicationCable::Channel
+  def subscribed
+    question = Question.find(params[:id])
+    stream_for question
+  end
+
+  def unsubscribed
+    stop_all_streams
+  end
+end
