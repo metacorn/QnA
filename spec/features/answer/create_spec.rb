@@ -61,6 +61,8 @@ feature 'created answers shows up at once', %q{
 } do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
+  given!(:gist_url) { 'https://gist.github.com/metacorn/361365b73824b830cded8cd527850bc5' }
+  given!(:regular_url1) { 'https://google.com' }
 
   scenario "all users see new answer in real-time", js: true do
     Capybara.using_session("user") do
@@ -74,13 +76,40 @@ feature 'created answers shows up at once', %q{
 
     Capybara.using_session("user") do
       fill_in 'answer_body', with: "#{"body" * 25}"
+
+      attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+      click_on 'Add a link'
+
+      within '#new-links .nested-fields:nth-child(1)' do
+        fill_in 'Name', with: 'Regular URL #1'
+        fill_in 'URL', with: regular_url1
+      end
+
+      click_on 'Add a link'
+
+      within '#new-links .nested-fields:nth-child(2)' do
+        fill_in 'Name', with: 'Gist URL'
+        fill_in 'URL', with: gist_url
+      end
+
       click_on 'Leave'
 
       expect(page).to have_content "#{"body" * 25}"
     end
 
     Capybara.using_session("guest") do
-      expect(page).to have_content "#{"body" * 25}"
+      within ".answers" do
+        expect(page).to have_content "#{"body" * 25}"
+
+        expect(page).to have_link 'Regular URL #1', href: regular_url1
+        expect(page).to have_content 'Gist URL'
+        expect(page).to have_content 'gistfile1.txt'
+        expect(page).to have_content 'content of gist_url'
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
     end
   end
 end
