@@ -1,5 +1,5 @@
 $(document).on "turbolinks:load", ->
-  deleteAllSubscriptions()
+  stopAllSubscriptions()
 
   pathname = document.location.pathname
 
@@ -9,5 +9,7 @@ $(document).on "turbolinks:load", ->
   if (/\/questions\/\d+/.test(pathname))
     startAnswersSubscription()
 
-@deleteAllSubscriptions = ->
-  App.cable.disconnect()
+@stopAllSubscriptions = ->
+  if subscriptions = App.cable.subscriptions.subscriptions
+    for subscription in subscriptions
+      subscription.unsubscribe()

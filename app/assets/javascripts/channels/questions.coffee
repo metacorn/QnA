@@ -1,6 +1,7 @@
 @startQuestionsSubscription = ->
   App.questions = App.cable.subscriptions.create "QuestionsChannel",
     connected: ->
+      console.log('startQuestionsSubscription')
 
     disconnected: ->
 
