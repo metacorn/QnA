@@ -25,11 +25,11 @@ div id="answer_#{@answer.id}" class="mb-3"
 
   .votes
     => "Votes:"
-    - if gon.user_id
+    - if gon.user_id != 0
       span.vote-down
         a data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_down" => "down"
     span.rating=> "0"
-    - if gon.user_id
+    - if gon.user_id != 0
       span.vote-up
         a data-type="json" data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@answer.id}/vote_up" => "up"
     span.cancel-vote

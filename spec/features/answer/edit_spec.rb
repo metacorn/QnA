@@ -43,7 +43,7 @@ feature 'user can edit his answer', %q{
     scenario 'edits his answer with adding attached files', js: true do
       within "#answer_#{answer.id}" do
         click_on 'Edit'
-        attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        attach_file "answer-#{answer.id}-file-upload", ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
         click_on 'Update'
 
         expect(page).to have_link "rails_helper.rb"

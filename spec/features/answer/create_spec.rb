@@ -29,7 +29,7 @@ feature 'user can create answer while being on question page', %q{
 
   scenario 'answers to a question with attached files', js: true do
     fill_in 'answer_body', with: "#{"body" * 25}"
-    attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+    attach_file 'new-file-upload', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
     click_on 'Leave'
 
     expect(page).to have_link "rails_helper.rb"
@@ -77,7 +77,7 @@ feature 'created answers shows up at once', %q{
     Capybara.using_session("user") do
       fill_in 'answer_body', with: "#{"body" * 25}"
 
-      attach_file 'Files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      attach_file 'new-file-upload', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
 
       click_on 'Add a link'
 

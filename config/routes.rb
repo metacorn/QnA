@@ -10,7 +10,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: [:votable] do
+  concern :commentable do
+    resources :comments, only: %i[create]
+  end
+
+  resources :questions, concerns: [:votable, :commentable] do
     resources :answers, concerns: [:votable], shallow: true, except: %i[index show] do
       member do
         post :mark
