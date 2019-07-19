@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show edit update destroy]
+  after_action :publish_question, only: %i[create]
 
   def index
     @questions = Question.all
@@ -57,5 +58,11 @@ class QuestionsController < ApplicationController
                                       files: [],
                                       links_attributes: [:name, :url],
                                       badge_attributes: [:name, :image] )
+  end
+
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast('questions',
+                                question: @question)
   end
 end

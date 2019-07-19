@@ -68,3 +68,41 @@ feature 'user can create question', %q{
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 end
+
+feature 'created questions shows up at once', %q{
+  in order to communicate interactively
+  i'd like to see users questions right after their creating
+  without refreshing questions page
+} do
+  given(:user) { create(:user) }
+  given(:question_title) { 'Test question title' }
+  given(:question_body) { "#{"body" * 25}" }
+
+  scenario "all users see new question in real-time", js: true do
+    Capybara.using_session("user") do
+      login(user)
+      visit questions_path
+    end
+
+    Capybara.using_session("guest") do
+      visit questions_path
+    end
+
+    Capybara.using_session("user") do
+      click_on 'Ask a question'
+
+      fill_in 'Title', with: question_title
+      fill_in 'Body', with: question_body
+
+      click_on 'Ask'
+
+      expect(page).to have_content 'Your question was successfully created.'
+      expect(page).to have_content question_title
+      expect(page).to have_content question_body
+    end
+
+    Capybara.using_session("guest") do
+      expect(page).to have_link question_title
+    end
+  end
+end
