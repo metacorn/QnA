@@ -1,7 +1,6 @@
 @startAnswersSubscription = ->
   App.answers = App.cable.subscriptions.create({channel: 'AnswersChannel', id: gon.question_id}, {
     connected: ->
-      console.log('startAnswersSubscription')
 
     disconnected: ->
 
