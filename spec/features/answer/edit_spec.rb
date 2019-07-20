@@ -36,7 +36,7 @@ feature 'user can edit his answer', %q{
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content new_valid_body
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_selector('textarea', id: 'answer_body')
       end
     end
 

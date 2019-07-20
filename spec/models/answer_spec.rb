@@ -14,6 +14,7 @@ RSpec.describe Answer, type: :model do
   it { should have_many(:files_attachments) }
 
   it_behaves_like "votable"
+  it_behaves_like "commentable"
 
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }

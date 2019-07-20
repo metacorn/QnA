@@ -1,0 +1,7 @@
+.comment-errors
+
+= form_with model: [resource, Comment.new], class: 'new-comment' do |f|
+  div= f.label :body, 'Your comment:', class: "mb-0"
+  div= f.text_area :body, cols: 32, rows: 3
+
+  .mt-0= f.submit 'Add'

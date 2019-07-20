@@ -10,7 +10,7 @@ div.answers
   = render 'shared/errors', resource: @answer
 
 = form_with model: [@question, @answer], class: 'new-answer' do |f|
-  div= f.label :body, 'Your answer', class: "mb-0"
+  div= f.label :body, 'Your answer:', class: "mb-0"
   div= f.text_area :body, cols: 32, rows: 3
 
   div= f.label :files, 'Files', class: "mb-0"

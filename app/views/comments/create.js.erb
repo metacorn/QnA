@@ -2,8 +2,8 @@
 $('#<%= commentable_selector_id %>').find('.comment-errors').html('<%= render 'shared/errors', resource: @comment %>')
 <% if @comment.persisted? %>
   <% if @comment.commentable.comments.size == 1 %>
-    $('#<%= commentable_selector_id %>').find('.comments').append('<p class="mb-0">Comments:</p>')
+    $('#<%= commentable_selector_id %>').find('.comments-list').append('<p class="mb-0 ml-n2">Comments:</p>')
   <% end %>
-  $('#<%= commentable_selector_id %>').find('.comments').append('<%= j render @comment %>')
+  $('#<%= commentable_selector_id %>').find('.comments-list').append('<%= j render @comment %>')
   $('#<%= commentable_selector_id %>').find('#comment_body').val('')
 <% end %>
