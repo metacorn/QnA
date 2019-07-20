@@ -33,7 +33,7 @@ feature 'user can add links to an answer', %q{
       fill_in 'URL', with: regular_url2
     end
 
-    click_on 'Leave'
+    click_on 'Leave an answer'
 
     within ".answers" do
       expect(page).to have_link 'Regular URL #1', href: regular_url1
@@ -56,7 +56,7 @@ feature 'user can add links to an answer', %q{
       fill_in 'URL', with: 'gist_url1'
     end
 
-    click_on 'Leave'
+    click_on 'Leave an answer'
 
     expect(page).to have_content 'is an invalid URL'
   end
@@ -71,7 +71,7 @@ feature 'user can add links to an answer', %q{
       fill_in 'URL', with: gist_url
     end
 
-    click_on 'Leave'
+    click_on 'Leave an answer'
 
     expect(page).to have_content 'Gist URL'
     expect(page).to have_content 'gistfile1.txt'

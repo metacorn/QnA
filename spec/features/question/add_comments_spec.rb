@@ -13,7 +13,7 @@ feature 'user can add comments to a question', %q{
 
     within "#question_#{question.id}" do
       fill_in 'comment_body', with: "#{"body" * 5}"
-      click_on 'Add'
+      click_on 'Add a comment'
     end
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
@@ -28,7 +28,7 @@ feature 'user can add comments to a question', %q{
     scenario 'adds a comment to a question', js: true do
       within "#question_#{question.id}" do
         fill_in 'comment_body', with: "#{"body" * 5}"
-        click_on 'Add'
+        click_on 'Add a comment'
 
         expect(page).to have_content "#{"body" * 5}"
       end
@@ -37,9 +37,35 @@ feature 'user can add comments to a question', %q{
     scenario 'tries to add a comment with invalid attributes to a question', js: true do
       within "#question_#{question.id}" do
         fill_in 'comment_body', with: "00000"
-        click_on 'Add'
+        click_on 'Add a comment'
 
         expect(page).to have_content "Body is too short (minimum is 10 characters)"
+      end
+    end
+  end
+
+  describe 'multiple sessions' do
+    scenario "all users see new comments in real-time", js: true do
+      Capybara.using_session("user") do
+        login(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session("guest") do
+        visit question_path(question)
+      end
+
+      Capybara.using_session("user") do
+        within "#question_#{question.id}" do
+          fill_in 'comment_body', with: "the first session comment"
+          click_on 'Add a comment'
+        end
+      end
+
+      Capybara.using_session("guest") do
+        within "#question_#{question.id}" do
+          expect(page).to have_content "the first session comment"
+        end
       end
     end
   end

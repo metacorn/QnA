@@ -1,4 +1,4 @@
-class AnswersChannel < ApplicationCable::Channel
+class CommentsChannel < ApplicationCable::Channel
   def subscribed
     question = Question.find(params[:id])
     stream_for question

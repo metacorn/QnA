@@ -8,6 +8,7 @@ $(document).on "turbolinks:load", ->
 
   if (/\/questions\/\d+/.test(pathname))
     startAnswersSubscription()
+    startCommentsSubscription()
 
 @stopAllSubscriptions = ->
   if subscriptions = App.cable.subscriptions.subscriptions
