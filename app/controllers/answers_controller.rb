@@ -3,6 +3,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_answer, only: %i[update destroy mark]
+  after_action :publish_answer, only: %i[create]
 
   def new
     @answer = Answer.new
@@ -10,8 +11,7 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
+    @answer = @question.answers.new(answer_params.merge(user: current_user))
     @answer.save
   end
 
@@ -42,5 +42,13 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    AnswersChannel.broadcast_to(@answer.question,
+                                answer: @answer,
+                                files: helpers.files_list(@answer.files),
+                                links: helpers.links_list(@answer.links))
   end
 end

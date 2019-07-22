@@ -1,0 +1,6 @@
+<% commentable_selector_id = "#{@comment.commentable_type.downcase}_#{@comment.commentable_id}" %>
+$('#<%= commentable_selector_id %>').find('.comment-errors').html('<%= render 'shared/errors', resource: @comment %>')
+<% if @comment.persisted? %>
+  $('#<%= commentable_selector_id %>').find('.comments-list').append('<%= j render @comment %>')
+  $('#<%= commentable_selector_id %>').find('#comment_body').val('')
+<% end %>

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :questions
   has_many :answers
+  has_many :comments
   has_many :badges, dependent: :destroy
   has_many :votes, dependent: :destroy
 

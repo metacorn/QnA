@@ -10,8 +10,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: [:votable] do
-    resources :answers, concerns: [:votable], shallow: true, except: %i[index show] do
+  concern :commentable do
+    resources :comments, only: %i[create]
+  end
+
+  resources :questions, concerns: [:votable, :commentable] do
+    resources :answers, concerns: [:votable, :commentable], shallow: true, except: %i[index show] do
       member do
         post :mark
       end
@@ -25,4 +29,6 @@ Rails.application.routes.draw do
   resources :users, only: %i[] do
     resources :badges, shallow: true, only: %i[index]
   end
+
+  mount ActionCable.server, at: '/cable'
 end

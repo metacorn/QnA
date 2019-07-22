@@ -1,0 +1,2 @@
+div class="mb-1" id="comment-#{@comment.id}"
+  p class="mb-1" = @comment.body

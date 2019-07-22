@@ -21,6 +21,7 @@ gem 'devise'
 gem 'jquery-rails'
 # UI
 gem 'bootstrap', '~> 4.3.1'
+gem 'skim'
 # Google Cloud Storage
 gem 'google-cloud-storage', '~> 1.11', require: false
 # Amazon AWS
@@ -52,6 +53,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Templates
 gem 'slim-rails'
+
+gem 'gon'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

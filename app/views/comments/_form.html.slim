@@ -1,0 +1,6 @@
+.comment-errors
+
+= form_with model: [resource, Comment.new], class: 'new-comment' do |f|
+  div= f.text_area :body, cols: 31, rows: 2, placeholder: "Comment this #{resource.class.to_s.downcase}"
+
+  .mt-0= f.submit 'Add a comment'

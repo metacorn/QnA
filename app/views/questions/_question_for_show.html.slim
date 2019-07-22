@@ -46,3 +46,6 @@ div id="question_#{@question.id}"
         = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
 
     div= f.submit 'Update'
+
+  div class="comments ml-2"
+    = render(partial: 'comments/comments', locals: { resource: @question })

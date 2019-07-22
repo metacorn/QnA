@@ -21,4 +21,5 @@ RSpec.describe Question, type: :model do
   it { should have_many(:files_attachments) }
 
   it_behaves_like "votable"
+  it_behaves_like "commentable"
 end
