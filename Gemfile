@@ -30,6 +30,9 @@ gem "aws-sdk-s3", require: false
 gem 'cocoon'
 # GitHub API client
 gem "octokit", "~> 4.0"
+#OAuth
+gem "omniauth"
+gem "omniauth-github"
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'

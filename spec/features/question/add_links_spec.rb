@@ -1,5 +1,5 @@
 require 'rails_helper'
-require "#{Rails.root}/app/services/gist_content_service.rb"
+require "#{Rails.root}/app/services/gist_content.rb"
 
 feature 'user can add links to a question', %q{
   in order to provide additional info to my question

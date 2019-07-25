@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "GistContentService" do
-  let(:service_with_valid_gist_id) { GistContentService.new('99f81dab3792c594fd02eb84ab53f85e') }
-  let(:service_with_invalid_gist_id) { GistContentService.new('1234567890') }
+RSpec.describe "Services::GistContent" do
+  let(:service_with_valid_gist_id) { Services::GistContent.new('99f81dab3792c594fd02eb84ab53f85e') }
+  let(:service_with_invalid_gist_id) { Services::GistContent.new('1234567890') }
 
   describe '#content' do
     it 'returns content in case of valid gist id' do
