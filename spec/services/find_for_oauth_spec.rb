@@ -7,7 +7,7 @@ RSpec.describe "Services::FindForOauth" do
 
   context 'user already has authorization' do
     it 'returns this user' do
-      user.authorizations.create(provider: 'github', uid: '123')
+      user.authorizations.create(provider: 'github', uid: '123', oauth_email: user.email)
 
       expect(subject.call).to eq user
     end

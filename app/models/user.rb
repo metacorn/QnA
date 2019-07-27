@@ -11,10 +11,32 @@ class User < ApplicationRecord
           :recoverable,
           :rememberable,
           :validatable,
-          :omniauthable, omniauth_providers: [:github]
+          :confirmable,
+          :omniauthable, omniauth_providers: [:github, :vkontakte]
 
-  def self.find_for_oauth(auth)
-    Services::FindForOauth.new(auth).call
+  validates_format_of :email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/
+
+  class << self
+    def find_for_oauth(auth)
+      Services::FindForOauth.new(auth).call
+    end
+
+    def check_email_set_user(email)
+      user = User.find_or_initialize_by(email: email) do |user|
+        password = Devise.friendly_token[0, 20]
+        user.email = email
+        user.password = password
+        user.password_confirmation = password
+        user.skip_confirmation!
+      end
+      user
+    end
+  end
+
+  def create_auth(mail, session_auth)
+    authorizations.create(oauth_email: mail,
+                          provider: session_auth["provider"],
+                          uid: session_auth["uid"])
   end
 
   def owner?(content)

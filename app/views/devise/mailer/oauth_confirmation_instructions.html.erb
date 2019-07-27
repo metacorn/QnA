@@ -1,0 +1,5 @@
+<p>Welcome <%= @authorization.oauth_email %>!</p>
+
+<p>You can confirm your <%= @authorization.provider %> account email through the link below:</p>
+
+<p><%= link_to 'Confirm my email', @url %></p>

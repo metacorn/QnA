@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-feature 'user can sign in with his GitHub account', %q{
+feature 'user can sign in with his Vkontakte account', %q{
   in order to not to create additional account
-  as a owner of GitHub account
+  as a owner of Vkontakte account
   i'd like to be able to sign in with it
 } do
   let!(:user) { create(:user) }
@@ -15,11 +15,11 @@ feature 'user can sign in with his GitHub account', %q{
     context 'with email' do
       context 'of existing user' do
         scenario 'user tries to sign in' do
-          expect(page).to have_content 'Sign in with GitHub'
-          mock_auth_hash(provider: :github, email: user.email)
-          click_on 'Sign in with GitHub'
+          expect(page).to have_content 'Sign in with Vkontakte'
+          mock_auth_hash(provider: :vkontakte, email: user.email)
+          click_on 'Sign in with Vkontakte'
 
-          expect(page).to have_content 'Successfully authenticated from GitHub account.'
+          expect(page).to have_content 'Successfully authenticated from Vkontakte account.'
           expect(page).to have_content user.email
           expect(page).to have_link 'Log out'
         end
@@ -27,11 +27,11 @@ feature 'user can sign in with his GitHub account', %q{
 
       context 'of no one of existing users' do
         scenario 'user tries to sign in' do
-          expect(page).to have_content 'Sign in with GitHub'
-          mock_auth_hash(provider: :github, email: 'another@user.com')
-          click_on 'Sign in with GitHub'
+          expect(page).to have_content 'Sign in with Vkontakte'
+          mock_auth_hash(provider: :vkontakte, email: 'another@user.com')
+          click_on 'Sign in with Vkontakte'
 
-          expect(page).to have_content 'Successfully authenticated from GitHub account.'
+          expect(page).to have_content 'Successfully authenticated from Vkontakte account.'
           expect(page).to have_content 'another@user.com'
           expect(page).to have_link 'Log out'
         end
@@ -40,11 +40,11 @@ feature 'user can sign in with his GitHub account', %q{
 
     context 'without email' do
       scenario 'user follows confirmation instructions' do
-        expect(page).to have_content 'Sign in with GitHub'
-        mock_auth_hash(provider: :github, email: nil)
-        click_on 'Sign in with GitHub'
+        expect(page).to have_content 'Sign in with Vkontakte'
+        mock_auth_hash(provider: :vkontakte, email: nil)
+        click_on 'Sign in with Vkontakte'
 
-        expect(page).to have_content 'GitHub did not provide your email. Please enter your email for sending you confirmation instructions.'
+        expect(page).to have_content 'Vkontakte did not provide your email. Please enter your email for sending you confirmation instructions.'
         expect(page).to_not have_link 'Log out'
         fill_in 'oauth_email', with: 'another@user.com'
         click_button 'Confirm email'
@@ -61,20 +61,20 @@ feature 'user can sign in with his GitHub account', %q{
 
         visit new_user_session_path
 
-        expect(page).to have_content 'Sign in with GitHub'
-        click_on 'Sign in with GitHub'
+        expect(page).to have_content 'Sign in with Vkontakte'
+        click_on 'Sign in with Vkontakte'
 
-        expect(page).to have_content 'Successfully authenticated from GitHub account.'
+        expect(page).to have_content 'Successfully authenticated from Vkontakte account.'
         expect(page).to have_content 'another@user.com'
         expect(page).to have_link 'Log out'
       end
 
       scenario 'user tries to log in without confirmation' do
-        expect(page).to have_content 'Sign in with GitHub'
-        mock_auth_hash(provider: :github, email: nil)
-        click_on 'Sign in with GitHub'
+        expect(page).to have_content 'Sign in with Vkontakte'
+        mock_auth_hash(provider: :vkontakte, email: nil)
+        click_on 'Sign in with Vkontakte'
 
-        expect(page).to have_content 'GitHub did not provide your email. Please enter your email for sending you confirmation instructions.'
+        expect(page).to have_content 'Vkontakte did not provide your email. Please enter your email for sending you confirmation instructions.'
         expect(page).to_not have_link 'Log out'
         fill_in 'oauth_email', with: 'another@user.com'
         click_button 'Confirm email'
@@ -84,9 +84,9 @@ feature 'user can sign in with his GitHub account', %q{
         visit new_user_session_path
 
         expect(page).to_not have_link 'Log out'
-        expect(page).to have_content 'Sign in with GitHub'
+        expect(page).to have_content 'Sign in with Vkontakte'
 
-        click_on 'Sign in with GitHub'
+        click_on 'Sign in with Vkontakte'
 
         expect(page).to_not have_link 'Log out'
         expect(page).to have_content 'We have already sent you confirmation instructions to another@user.com. Please check your email.'
@@ -95,12 +95,12 @@ feature 'user can sign in with his GitHub account', %q{
   end
 
   context 'provider returns invalid data' do
-    scenario 'user tries to sign in with incorrect GitHub account data' do
-      expect(page).to have_content 'Sign in with GitHub'
-      mock_auth_hash(provider: :github, validness: false)
-      click_on 'Sign in with GitHub'
+    scenario 'user tries to sign in with incorrect Vkontakte account data' do
+      expect(page).to have_content 'Sign in with Vkontakte'
+      mock_auth_hash(provider: :vkontakte, validness: false)
+      click_on 'Sign in with Vkontakte'
 
-      expect(page).to have_content 'Could not authenticate you from GitHub because "Invalid credentials"'
+      expect(page).to have_content 'Could not authenticate you from Vkontakte because "Invalid credentials"'
       expect(page).to_not have_content 'mockuser@user.com'
       expect(page).to have_link 'Log in'
     end

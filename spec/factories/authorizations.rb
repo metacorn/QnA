@@ -1,7 +1,11 @@
 FactoryBot.define do
   factory :authorization do
-    user { nil }
-    provider { "MyString" }
-    uid { "MyString" }
+    provider { "github" }
+    uid { "654321" }
+
+    trait :with_user do
+      user
+      oauth_email { user.email }
+    end
   end
 end
