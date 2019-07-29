@@ -1,0 +1,12 @@
+h5 Send confirmation instructions
+
+- if resource
+  .authorization-errors
+      =render 'shared/errors', resource: resource
+
+= form_with(url: confirm_email_path, method: :post, local: true) do |f|
+  .= f.label :oauth_email, 'Email', class: "mb-0"
+  .= f.email_field :oauth_email
+  .mt-2= f.submit 'Confirm email'
+
+= render "devise/shared/links"

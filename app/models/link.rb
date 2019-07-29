@@ -15,7 +15,7 @@ class Link < ApplicationRecord
   end
 
   def gist_content
-    @gist_content ||= GistContentService.new(gist_id).content
+    @gist_content ||= Services::GistContent.new(gist_id).content
   end
 
   private

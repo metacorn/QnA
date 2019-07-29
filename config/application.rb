@@ -24,6 +24,8 @@ module Qna
                         request_specs: false
     end
 
+    config.autoload_paths += [config.root.join('app')]
+
     config.before_configuration do
       env_file = File.join(Rails.root, 'config', 'secrets', 'local_env.yml')
       YAML.load(File.open(env_file)).each do |key, value|

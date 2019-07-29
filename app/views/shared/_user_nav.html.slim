@@ -1,8 +1,11 @@
-p class="mb-0"
-  => link_to 'QnA', root_path
-  - if current_user
-    => link_to 'Log out', destroy_user_session_path, method: :delete
-    = link_to 'Badges', user_badges_path(current_user)
-  - else
-    => link_to 'Log in', new_user_session_path
-    = link_to 'Sign up', new_user_registration_path
+div class="navbar navbar-light bg-light"
+  .mr-auto
+    => link_to 'QnA', root_path
+  .ml-auto
+    - if current_user
+      => link_to 'Badges', user_badges_path(current_user)
+      => link_to 'Log out', destroy_user_session_path, method: :delete
+      = current_user.email
+    - else
+      => link_to 'Log in', new_user_session_path
+      = link_to 'Sign up', new_user_registration_path
