@@ -8,7 +8,7 @@ module Services
 
     def call
       if auth.respond_to?(:include?) && auth.include?(:provider) && auth.include?(:uid)
-        if authorization = Authorization.where(provider: auth.provider, uid: auth.uid.to_s).first
+        if authorization = Authorization.find_by(provider: auth.provider, uid: auth.uid.to_s)
           authorization.user
         else
           user_with_new_authorization

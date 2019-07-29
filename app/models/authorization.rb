@@ -9,11 +9,11 @@ class Authorization < ApplicationRecord
   validates_format_of :oauth_email, with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/
 
   def confirmed?
-    self.confirmed_at? ? true : false
+    confirmed_at?
   end
 
   def confirmation_sent?
-    self.confirmation_sent_at? ? true : false
+    confirmation_sent_at?
   end
 
   def skip_oauth_confirmation!

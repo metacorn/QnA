@@ -9,18 +9,20 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
 
   def confirm_email
     user = User.check_email_set_user(params[:oauth_email])
-    if user.save
-      if authorization = user.create_auth(params[:oauth_email], session[:auth])
-        if authorization.init_confirmation
-          DeviseConfirmationMailer.oauth_confirmation_instructions(authorization).deliver_now
-          redirect_to root_path, notice: "A confirmation email has been sent to #{authorization.oauth_email}."
-        end
-      else
-        flash.now[:alert] = "Error(s) with authentication."
-        render 'omniauth_callbacks/confirm_email', locals: {resource: authorization}
-      end
-    else
+    unless user.save
       render 'omniauth_callbacks/confirm_email', locals: {resource: user}
+      return
+    end
+
+    unless authorization = user.create_auth(params[:oauth_email], session[:auth])
+      flash.now[:alert] = "Error(s) with authentication."
+      render 'omniauth_callbacks/confirm_email', locals: {resource: authorization}
+      return
+    end
+
+    if authorization.init_confirmation
+      DeviseConfirmationMailer.oauth_confirmation_instructions(authorization).deliver_now
+      redirect_to root_path, notice: "A confirmation email has been sent to #{authorization.oauth_email}."
     end
   end
 
