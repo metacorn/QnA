@@ -2,4 +2,5 @@
   p class="mb-0 ml-n2" Comments:
   = render(partial: 'comments/comment', collection: resource.comments, as: :comment)
 
-= render(partial: 'comments/form', locals: { resource: resource })
+- if can?(:create, Comment)
+  = render(partial: 'comments/form', locals: { resource: resource })

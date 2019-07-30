@@ -1,4 +1,6 @@
 class FilesController < ApplicationController
+  authorize_resource
+
   def destroy
     @file = ActiveStorage::Attachment.find(params[:id])
     return head :forbidden unless @file.record_type.in?(%w[Question Answer])

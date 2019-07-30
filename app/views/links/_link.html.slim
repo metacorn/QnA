@@ -2,7 +2,7 @@ div id="link_#{link.id}"
   - link_number = link_counter + 1
   - if link.gist?
     = "#{link_number}. #{link.name}"
-    - if current_user&.owner?(link.linkable)
+    - if can?(:destroy, link)
         =< deleting_link(link)
     .gist
       - link.gist_content.each do |item|
@@ -12,5 +12,5 @@ div id="link_#{link.id}"
   - else
     => "#{link_number}."
     = link_to link.name, link.url, target: "_blank"
-    - if current_user&.owner?(link.linkable)
+    - if can?(:destroy, link)
         =< deleting_link(link)

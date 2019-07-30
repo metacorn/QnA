@@ -13,12 +13,7 @@ feature 'user can add comments to an answer', %q{
   scenario 'unauthenticated user can not add comments to answers' do
     visit question_path(question)
 
-    within "#answer_#{answer.id}" do
-      fill_in 'comment_body', with: "#{"body" * 5}"
-      click_on 'Add a comment'
-    end
-
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_link 'Add a comment'
   end
 
   describe 'authenticated user' do

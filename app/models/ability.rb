@@ -28,8 +28,8 @@ class Ability
     cannot :vote, [Question, Answer], user_id: user.id
     can :mark, Answer, question: { user_id: user.id }
     cannot :mark, Answer, user_id: user.id
-    can :create, Badge, question: { user_id: user.id }
-    can [:create, :destroy], Link, linkable: { user_id: user.id }
+    can :destroy, Link, linkable: { user_id: user.id }
+    can :destroy, File, record: { user_id: user.id }
   end
 
   def admin_abilities

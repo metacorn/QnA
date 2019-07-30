@@ -24,7 +24,6 @@ RSpec.describe Ability do
     let(:answer) { create(:answer, question: other_question, user: user) }
     let(:other_answer) { create(:answer, question: question, user: other_user) }
     let(:own_answer_to_his_question) { create(:answer, question: question, user: user) }
-    let(:attacment) { Rack::Test::UploadedFile.new(Rails.root.join('spec/rails_helper.rb')) }
 
     it { should be_able_to :read, :all }
     it { should_not be_able_to :manage, :all }
@@ -57,9 +56,6 @@ RSpec.describe Ability do
 
     it { should be_able_to :mark, other_answer }
     it { should_not be_able_to :mark, own_answer_to_his_question }
-
-    it { should be_able_to :create, build(:badge, question: question) }
-    it { should_not be_able_to :create, build(:badge, question: other_question) }
 
     it { should be_able_to :destroy, create(:link, :valid, linkable: answer) }
     it { should_not be_able_to :destroy, create(:link, :valid, linkable: other_answer) }
