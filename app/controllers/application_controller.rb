@@ -1,6 +1,14 @@
 class ApplicationController < ActionController::Base
   before_action :set_gon_user
 
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.html { redirect_to root_url, alert: exception.message }
+      format.json { head :forbidden }
+      format.js { head :forbidden }
+    end
+  end
+
   private
 
   def set_gon_user
