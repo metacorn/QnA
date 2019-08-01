@@ -13,7 +13,7 @@ div id="question_#{@question.id}"
       - @question.files.each do |file|
         p.mb-0
           = link_to file.filename.to_s, url_for(file)
-          =< link_to('Delete file', file_path(file), method: :delete, remote: true) if can?(:destroy, @question)
+          =< link_to('Delete file', file_path(file), method: :delete, remote: true) if can?(:modify, @question)
 
   - if @question.links.present?
     div id="question-#{@question.id}-links" class=" mb-1"

@@ -9,16 +9,12 @@ class Ability
     end
   end
 
-  def set_aliases
-    alias_action :vote_up, :vote_down, :cancel_vote, to: :vote
-  end
-
   def guest_abilities
     can :read, :all
   end
 
   def user_abilities(user)
-    set_aliases
+    alias_action :vote_up, :vote_down, :cancel_vote, to: :vote
 
     guest_abilities
 
