@@ -15,7 +15,7 @@ div id="answer_#{answer.id}" class="mb-3"
         - answer.files.each do |file|
           p.mb-0
             = link_to file.filename.to_s, url_for(file)
-            =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(answer)
+            =< link_to('Delete file', file_path(file), method: :delete, remote: true) if can?(:modify, answer)
 
     - if answer.links.present?
       div id="answer-#{answer.id}-links" class="mb-1"

@@ -5,6 +5,8 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[update destroy mark]
   after_action :publish_answer, only: %i[create]
 
+  authorize_resource
+
   def new
     @answer = Answer.new
   end

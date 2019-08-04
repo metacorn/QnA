@@ -47,10 +47,8 @@ feature 'only authenticated user can create answers', %q{
 
   scenario 'unauthenticated user tries to give an answer' do
     visit question_path(question)
-    fill_in 'answer_body', with: "#{"body" * 25}"
-    click_on 'Leave an answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_link 'Leave an answer'
   end
 end
 

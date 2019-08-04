@@ -13,7 +13,7 @@ div id="question_#{@question.id}"
       - @question.files.each do |file|
         p.mb-0
           = link_to file.filename.to_s, url_for(file)
-          =< link_to('Delete file', file_path(file), method: :delete, remote: true) if current_user&.owner?(@question)
+          =< link_to('Delete file', file_path(file), method: :delete, remote: true) if can?(:modify, @question)
 
   - if @question.links.present?
     div id="question-#{@question.id}-links" class=" mb-1"
@@ -24,28 +24,29 @@ div id="question_#{@question.id}"
   .votes
     = render(partial: 'votes/rating', locals: { votable: @question })
 
-  p.mb-1= render(partial: 'shared/question_links', locals: { question: @question }) if current_user&.owner?(@question)
+  p.mb-1= render(partial: 'shared/question_links', locals: { question: @question }) if can?(:manage, @question)
 
-  .question-errors
-    =render 'shared/errors', resource: @question
+  - if can?(:update, @question)
+    .question-errors
+      =render 'shared/errors', resource: @question
 
-  = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
-    div= f.label :title, class: "mb-0"
-    div= f.text_field :title, size: 29, class: "mb-2"
+    = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
+      div= f.label :title, class: "mb-0"
+      div= f.text_field :title, size: 29, class: "mb-2"
 
-    div= f.label :body, 'Body', class: "mb-0"
-    div= f.text_area :body, cols: 32, rows: 3
+      div= f.label :body, 'Body', class: "mb-0"
+      div= f.text_area :body, cols: 32, rows: 3
 
-    div= f.label :files, 'Files', class: "mb-0"
-    div= f.file_field :files, multiple: true, class: "mb-2"
+      div= f.label :files, 'Files', class: "mb-0"
+      div= f.file_field :files, multiple: true, class: "mb-2"
 
-    p.mb-0 Links
-    #new-links
-      = f.fields_for :links do |l|
-      .links
-        = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
+      p.mb-0 Links
+      #new-links
+        = f.fields_for :links do |l|
+        .links
+          = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
 
-    div= f.submit 'Update'
+      div= f.submit 'Update'
 
   div class="comments ml-2"
     = render(partial: 'comments/comments', locals: { resource: @question })

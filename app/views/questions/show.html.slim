@@ -6,20 +6,21 @@ h5.mt-3 Answers
 div.answers
   = render @question.answers
 
-.answer-errors
-  = render 'shared/errors', resource: @answer
+- if can?(:create, Answer)
+  .answer-errors
+    = render 'shared/errors', resource: @answer
 
-= form_with model: [@question, @answer], class: 'new-answer' do |f|
-  div= f.label :body, 'Your answer:', class: "mb-0"
-  div= f.text_area :body, cols: 32, rows: 3, placeholder: "Answer to this question"
+  = form_with model: [@question, @answer], class: 'new-answer' do |f|
+    div= f.label :body, 'Your answer:', class: "mb-0"
+    div= f.text_area :body, cols: 32, rows: 3, placeholder: "Answer to this question"
 
-  div= f.label :files, 'Files', class: "mb-0"
-  div= f.file_field :files, multiple: true, direct_upload: true, class: "mb-3", id: "new-file-upload"
+    div= f.label :files, 'Files', class: "mb-0"
+    div= f.file_field :files, multiple: true, direct_upload: true, class: "mb-3", id: "new-file-upload"
 
-  p.mb-0 Links
-  #new-links
-    = f.fields_for :links do |l|
-    .links
-      = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
+    p.mb-0 Links
+    #new-links
+      = f.fields_for :links do |l|
+      .links
+        = link_to_add_association 'Add a link', f, :links, partial: 'links/link_fields'
 
-  .mt-2= f.submit 'Leave an answer'
+    .mt-2= f.submit 'Leave an answer'
