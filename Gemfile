@@ -34,6 +34,7 @@ gem "octokit", "~> 4.0"
 gem "omniauth"
 gem "omniauth-github"
 gem 'omniauth-vkontakte'
+gem 'doorkeeper'
 #Authorization
 gem 'cancancan'
 
