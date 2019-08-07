@@ -1,24 +1,7 @@
-# README
+# Questions and Answers
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**QnA** is a stackoverflow-like web application written in [Ruby on Rails](https://rubyonrails.org/) framework. 
 
-Things you may want to cover:
+## The application overview
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Users can ask questions, get answers, leave comments, vote for liked questions and answers etc.
