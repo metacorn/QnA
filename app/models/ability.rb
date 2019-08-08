@@ -26,6 +26,7 @@ class Ability
     cannot :mark, Answer, user_id: user.id
     can :destroy, Link, linkable: { user_id: user.id }
     can :destroy, ActiveStorage::Attachment, record: { user_id: user.id }
+    # can :me, User, id: user.id
   end
 
   def admin_abilities
