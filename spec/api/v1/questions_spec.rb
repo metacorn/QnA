@@ -66,4 +66,77 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/questions/:id' do
+    let(:user) { create(:user) }
+    let(:access_token) { create(:access_token) }
+    let(:question) { create(:question, :with_attachments, user: user) }
+    let(:files) { question.files }
+    let!(:links) { [create(:link, :valid, linkable: question),
+                    create(:link, :valid_gist, linkable: question)] }
+    let!(:comments) { create_list(:comment, 3, commentable: question, user: user) }
+    let(:question_response) { json['question'] }
+    let(:api_path) { "/api/v1/questions/#{question.id}" }
+
+    it_behaves_like 'API_authorable' do
+      let(:meth) { 'get' }
+    end
+
+    before do
+      get api_path, params: { access_token: access_token.token }, headers: headers
+    end
+
+    it 'returns 200 status' do
+      expect(response).to be_successful
+    end
+
+    it 'returns question' do
+      %w[id title body created_at updated_at].each do |attr|
+        expect(question_response[attr]).to eq question.send(attr).as_json
+      end
+    end
+
+    it 'contains user object' do
+      expect(question_response['user']['id']).to eq question.user.id
+    end
+
+    it 'contails all files list' do
+      expect(question_response['files'].map { |f| f['id'] }).to match_array files.pluck(:id)
+    end
+
+    it 'returns all files public fields' do
+      files.size.times do |i|
+        %w[id created_at].each do |attr|
+          expect(question_response['files'][i][attr]).to eq files[i].send(attr).as_json
+        end
+
+        expect(question_response['files'][i]['filename']).to eq files[i].blob['filename']
+        expect(question_response['files'][i]['url']).to eq Rails.application.routes.url_helpers.rails_blob_path(files[i], only_path: true)
+      end
+    end
+
+    it 'contains all links list' do
+      expect(question_response['links'].map { |l| l['id'] }).to match_array links.pluck(:id)
+    end
+
+    it 'returns all links public fields' do
+      links.size.times do |i|
+        %w[id name url created_at updated_at].each do |attr|
+          expect(question_response['links'][i][attr]).to eq links[i].send(attr).as_json
+        end
+      end
+    end
+
+    it 'contains all comments list' do
+      expect(question_response['comments'].map { |c| c['id'] }).to match_array comments.pluck(:id)
+    end
+
+    it 'returns all comments public fields' do
+      comments.size.times do |i|
+        %w[id body created_at updated_at].each do |attr|
+          expect(question_response['comments'][i][attr]).to eq comments[i].send(attr).as_json
+        end
+      end
+    end
+  end
 end
