@@ -39,6 +39,7 @@ gem 'doorkeeper'
 gem 'cancancan'
 #Serializers
 gem 'active_model_serializers', '~> 0.10'
+gem 'oj'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
