@@ -1,6 +1,6 @@
 class Api::V1::AnswersController < Api::V1::BaseController
   before_action :set_question, only: %i[index create]
-  before_action :set_answer, only: %i[show update]
+  before_action :set_answer, only: %i[show update destroy]
 
   authorize_resource
 
@@ -29,6 +29,12 @@ class Api::V1::AnswersController < Api::V1::BaseController
     else
       render json: { messages: @answer.errors.full_messages }
     end
+  end
+
+  def destroy
+    return head :forbidden unless current_user.owner?(@answer)
+    @answer.destroy
+    render json: { messages: ["Answer was successfully deleted."] }
   end
 
   private
