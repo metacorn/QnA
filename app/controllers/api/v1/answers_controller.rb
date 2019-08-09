@@ -1,6 +1,6 @@
 class Api::V1::AnswersController < Api::V1::BaseController
   before_action :set_question, only: %i[index create]
-  before_action :set_answer, only: %i[show]
+  before_action :set_answer, only: %i[show update]
 
   authorize_resource
 
@@ -14,6 +14,16 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   def create
     @answer = @question.answers.new(answer_params.merge(user: current_user))
+    if @answer.save
+      render json: @answer
+    else
+      render json: { messages: @answer.errors.full_messages }
+    end
+  end
+
+  def update
+    return head :forbidden unless current_user.owner?(@answer)
+    @answer.update(answer_params)
     if @answer.save
       render json: @answer
     else

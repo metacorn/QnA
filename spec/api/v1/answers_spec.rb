@@ -138,4 +138,79 @@ describe 'Questions API', type: :request do
       end
     end
   end
+
+  describe 'PATCH /api/v1/answers/:id' do
+    let(:user) { create(:user) }
+    let(:access_token) { create(:access_token, resource_owner_id: user.id) }
+    let(:question) { create(:question, user: user) }
+    let(:answer) { create(:answer, question: question, user: user) }
+    let(:api_path) { "/api/v1/answers/#{answer.id}" }
+
+    it_behaves_like 'API_authorable' do
+      let(:meth) { :patch }
+    end
+
+    context 'authorized' do
+      context "for user's answer" do
+        context 'with valid answer data' do
+          let(:patch_request) { patch api_path,
+                                      params: { access_token: access_token.token,
+                                                answer: attributes_for(:answer) },
+                                      headers: headers }
+
+          it 'returns 200 status' do
+            patch_request
+
+            expect(response).to be_successful
+          end
+
+          it 'updates a question' do
+            patch_request
+            answer.reload
+
+            %w[id body created_at].each do |attr|
+              expect(json['answer'][attr]).to eq answer.send(attr).as_json
+            end
+          end
+        end
+
+        context 'with invalid answer data' do
+          let(:patch_request) { patch api_path,
+                                      params: { access_token: access_token.token,
+                                                answer: attributes_for(:answer, :invalid) },
+                                      headers: headers }
+
+          it 'does not update an answer' do
+            expect { patch_request }.to_not change(answer, :updated_at)
+          end
+
+          it 'returns error messages' do
+            patch_request
+
+            expect(json['messages']).to include "Body is too short (minimum is 50 characters)"
+          end
+        end
+      end
+
+      context "for another user's question" do
+        let(:other_user) { create(:user) }
+        let(:other_answer) { create(:answer, question: question, user: other_user) }
+        let(:other_answer_api_path) { "/api/v1/answers/#{other_answer.id}" }
+        let(:patch_request) { patch other_answer_api_path,
+                                    params: { access_token: access_token.token,
+                                              answer: attributes_for(:answer) },
+                                    headers: headers }
+
+        it 'returns 403 status' do
+          patch_request
+
+          expect(response.status).to eq 403
+        end
+
+        it 'does not update a question' do
+          expect { patch_request }.to_not change(other_answer, :updated_at)
+        end
+      end
+    end
+  end
 end
