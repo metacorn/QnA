@@ -133,8 +133,41 @@ describe 'Questions API', type: :request do
 
     it 'returns all comments public fields' do
       comments.size.times do |i|
-        %w[id body created_at updated_at].each do |attr|
+        %w[id user_id body created_at updated_at].each do |attr|
           expect(question_response['comments'][i][attr]).to eq comments[i].send(attr).as_json
+        end
+      end
+    end
+  end
+
+  describe 'GET /api/v1/questions/:id/answers' do
+    let(:user) { create(:user) }
+    let(:access_token) { create(:access_token) }
+    let(:question) { create(:question, user: user) }
+    let!(:answers) { create_list(:answer, 5, question: question, user: user) }
+    let(:answers_response) { json['answers'] }
+    let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
+
+    it_behaves_like 'API_authorable' do
+      let(:meth) { 'get' }
+    end
+
+    before do
+      get api_path, params: { access_token: access_token.token }, headers: headers
+    end
+
+    it 'returns 200 status' do
+      expect(response).to be_successful
+    end
+
+    it 'contains all question answers list' do
+      expect(answers_response.map { |a| a['id']}).to match_array answers.pluck(:id)
+    end
+
+    it 'returns all question answers public fields' do
+      answers.size.times do |i|
+        %w[id user_id body best created_at updated_at].each do |attr|
+          expect(answers_response[i][attr]).to eq answers[i].send(attr).as_json
         end
       end
     end
