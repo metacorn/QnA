@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe 'Questions API', type: :request do
-  let(:headers) { { "CONTENT_TYPE" => "application/json",
-                    "ACCEPT" => 'application/json' } }
+  let(:headers) { { "ACCEPT" => 'application/json' } }
 
   describe 'GET /api/v1/answers/:id' do
     let(:user) { create(:user) }
@@ -17,7 +16,7 @@ describe 'Questions API', type: :request do
     let(:api_path) { "/api/v1/answers/#{answer.id}" }
 
     it_behaves_like 'API_authorable' do
-      let(:meth) { 'get' }
+      let(:meth) { :get }
     end
 
     before do
@@ -77,6 +76,64 @@ describe 'Questions API', type: :request do
       comments.size.times do |i|
         %w[id user_id body created_at updated_at].each do |attr|
           expect(answer_response['comments'][i][attr]).to eq comments[i].send(attr).as_json
+        end
+      end
+    end
+  end
+
+  describe 'POST /api/v1/questions/:id/answers' do
+    let(:user) { create(:user) }
+    let(:access_token) { create(:access_token) }
+    let(:question) { create(:question, user: user) }
+    let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
+
+    it_behaves_like 'API_authorable' do
+      let(:meth) { :post }
+    end
+
+    context 'authorized' do
+      context 'with valid answer data' do
+        let(:answer_params) { attributes_for(:answer) }
+        let(:post_request) { post api_path,
+                                  params: { access_token: access_token.token,
+                                            question: question,
+                                            answer: answer_params },
+                                  headers: headers }
+
+        it 'returns 200 status' do
+          post_request
+
+          expect(response).to be_successful
+        end
+
+        it 'creates an answer' do
+          expect { post_request }.to change(question.answers, :count).by(1)
+        end
+
+        it 'returns new answer data' do
+          post_request
+
+          %w[body].each do |attr|
+            expect(json['answer'][attr]).to eq answer_params[attr.to_sym]
+          end
+        end
+      end
+
+      context 'with invalid answer data' do
+        let(:post_request) { post api_path,
+                                  params: { access_token: access_token.token,
+                                            question: question,
+                                            answer: attributes_for(:answer, :invalid) },
+                                  headers: headers }
+
+        it 'does not create a question' do
+          expect { post_request }.to_not change(question.answers, :count)
+        end
+
+        it 'returns error messages' do
+          post_request
+
+          expect(json['messages']).to include "Body is too short (minimum is 50 characters)"
         end
       end
     end
