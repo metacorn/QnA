@@ -153,19 +153,18 @@ describe 'Questions API', type: :request do
     context 'authorized' do
       context "for user's answer" do
         context 'with valid answer data' do
-          let(:patch_request) { patch api_path,
-                                      params: { access_token: access_token.token,
-                                                answer: attributes_for(:answer) },
-                                      headers: headers }
+          before do
+            patch api_path,
+                  params: { access_token: access_token.token,
+                            answer: attributes_for(:answer) },
+                  headers: headers
+          end
 
           it 'returns 200 status' do
-            patch_request
-
             expect(response).to be_successful
           end
 
           it 'updates a question' do
-            patch_request
             answer.reload
 
             %w[id body created_at].each do |attr|
