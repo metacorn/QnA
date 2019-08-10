@@ -140,6 +140,7 @@ describe 'Questions API', type: :request do
 
   describe 'PATCH /api/v1/questions/:id' do
     let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
     let(:access_token) { create(:access_token, resource_owner_id: user.id) }
     let(:question) { create(:question, user: user) }
     let(:api_path) { "/api/v1/questions/#{question.id}" }
@@ -148,66 +149,11 @@ describe 'Questions API', type: :request do
       let(:meth) { :patch }
     end
 
-    context 'authorized' do
-      context "for user's question" do
-        context 'with valid question data' do
-          before do
-            patch api_path,
-                  params: { access_token: access_token.token,
-                            question: attributes_for(:question) },
-                  headers: headers
-          end
-
-          it 'returns 200 status' do
-            expect(response).to be_successful
-          end
-
-          it 'updates a question' do
-            question.reload
-
-            %w[id title body created_at].each do |attr|
-              expect(json['question'][attr]).to eq question.send(attr).as_json
-            end
-          end
-        end
-
-        context 'with invalid question data' do
-          let(:patch_request) { patch api_path,
-                                      params: { access_token: access_token.token,
-                                                question: attributes_for(:question, :invalid) },
-                                      headers: headers }
-
-          it 'does not update a question' do
-            expect { patch_request }.to_not change(question, :updated_at)
-          end
-
-          it 'returns error messages' do
-            patch_request
-
-            expect(json['messages']).to include "Title is too short (minimum is 15 characters)"
-          end
-        end
-      end
-
-      context "for another user's question" do
-        let(:other_user) { create(:user) }
-        let(:other_question) { create(:question, user: other_user) }
-        let(:other_question_api_path) { "/api/v1/questions/#{other_question.id}" }
-        let(:patch_request) { patch other_question_api_path,
-                                    params: { access_token: access_token.token,
-                                              question: attributes_for(:question) },
-                                    headers: headers }
-
-        it 'returns 403 status' do
-          patch_request
-
-          expect(response.status).to eq 403
-        end
-
-        it 'does not update a question' do
-          expect { patch_request }.to_not change(other_question, :updated_at)
-        end
-      end
+    it_behaves_like 'API_updatable' do
+      let(:resource) { question }
+      let(:other_user_resource) { create(:question, user: other_user) }
+      let(:resource_attrs) { %w[id title body created_at] }
+      let(:invalid_error_msg) { "Title is too short (minimum is 15 characters)" }
     end
   end
 
