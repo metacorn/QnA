@@ -7,8 +7,4 @@ class AnswerDetailedSerializer < ActiveModel::Serializer
   belongs_to :user
 
   has_many :comments
-
-  def links
-    object.links.order(:created_at)
-  end
 end
