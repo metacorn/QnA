@@ -45,7 +45,6 @@ RSpec.shared_examples_for "API_updatable" do
     end
 
     context "for another user's resource" do
-      let(:other_user_resource_api_path) { "/api/v1/#{resource_type.to_s.pluralize}/#{other_user_resource.id}" }
       let(:patch_request) { patch other_user_resource_api_path,
                                   params: { access_token: access_token.token,
                                             resource_type => attributes_for(resource_type) },

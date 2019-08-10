@@ -23,43 +23,29 @@ describe 'Questions API', type: :request do
         expect(response).to be_successful
       end
 
-      it 'returns list of questions' do
-        expect(json['questions'].size).to eq 5
-      end
-
-      it 'returns all public fields' do
-        5.times do |i|
-          %w[id title body created_at updated_at].each do |attr|
-            expect(json['questions'][i][attr]).to eq questions[i].send(attr).as_json
-          end
-        end
+      it_behaves_like 'API_readable_collection' do
+        let(:collection) { questions }
+        let(:collection_member_attrs) { %w[id title body created_at updated_at] }
+        let(:response_collection) { json['questions'] }
       end
 
       it 'contains short titles' do
-        5.times do |i|
+        questions.size.times do |i|
           expect(json['questions'][i]['short_title']).to eq questions[i].title.truncate(10)
         end
       end
 
       it 'contains user object' do
-        5.times do |i|
+        questions.size.times do |i|
           expect(json['questions'][i]['user']['id']).to eq questions[i].user.id
         end
       end
 
       describe 'answers' do
-        let(:answers_response) { json['questions'].first['answers'] }
-
-        it 'returns list of answers' do
-          expect(json['questions'].first['answers'].size).to eq 4
-        end
-
-        it 'returns all public fields' do
-          4.times do |i|
-            %w[id body best user_id created_at updated_at].each do |attr|
-              expect(answers_response[i][attr]).to eq answers[i].send(attr).as_json
-            end
-          end
+        it_behaves_like 'API_readable_collection' do
+          let(:collection) { answers }
+          let(:collection_member_attrs) { %w[id body created_at updated_at] }
+          let(:response_collection) { json['questions'].first['answers'] }
         end
       end
     end
@@ -108,16 +94,10 @@ describe 'Questions API', type: :request do
         expect(response).to be_successful
       end
 
-      it 'contains all question answers list' do
-        expect(answers_response.map { |a| a['id']}).to match_array answers.pluck(:id)
-      end
-
-      it 'returns all question answers public fields' do
-        answers.size.times do |i|
-          %w[id user_id body best created_at updated_at].each do |attr|
-            expect(answers_response[i][attr]).to eq answers[i].send(attr).as_json
-          end
-        end
+      it_behaves_like 'API_readable_collection' do
+        let(:collection) { answers }
+        let(:collection_member_attrs) { %w[id body created_at updated_at] }
+        let(:response_collection) { json['answers'] }
       end
     end
   end
@@ -140,7 +120,6 @@ describe 'Questions API', type: :request do
 
   describe 'PATCH /api/v1/questions/:id' do
     let(:user) { create(:user) }
-    let(:other_user) { create(:user) }
     let(:access_token) { create(:access_token, resource_owner_id: user.id) }
     let(:question) { create(:question, user: user) }
     let(:api_path) { "/api/v1/questions/#{question.id}" }
@@ -151,7 +130,9 @@ describe 'Questions API', type: :request do
 
     it_behaves_like 'API_updatable' do
       let(:resource) { question }
+      let(:other_user) { create(:user) }
       let(:other_user_resource) { create(:question, user: other_user) }
+      let(:other_user_resource_api_path) { "/api/v1/questions/#{other_user_resource.id}" }
       let(:resource_attrs) { %w[id title body created_at] }
       let(:invalid_error_msg) { "Title is too short (minimum is 15 characters)" }
     end
@@ -167,42 +148,12 @@ describe 'Questions API', type: :request do
       let(:meth) { :delete }
     end
 
-    context 'authorized' do
-      context "for user's question" do
-        before do
-          delete  api_path, params: { access_token: access_token.token }, headers: headers
-        end
-
-        it 'returns 200 status' do
-          expect(response).to be_successful
-        end
-
-        it 'returns a message' do
-          expect(json['messages']).to include "Question was successfully deleted."
-        end
-
-        it 'deletes a question' do
-          expect { question.reload }.to raise_error ActiveRecord::RecordNotFound
-        end
-      end
-
-      context "for another user's question" do
-        let(:other_user) { create(:user) }
-        let(:other_question) { create(:question, user: other_user) }
-        let(:other_question_api_path) { "/api/v1/questions/#{other_question.id}" }
-
-        before do
-          delete  other_question_api_path, params: { access_token: access_token.token }, headers: headers
-        end
-
-        it 'returns 403 status' do
-          expect(response.status).to eq 403
-        end
-
-        it 'does not deletes a question' do
-          expect { question.reload }.to_not raise_error
-        end
-      end
+    it_behaves_like 'API_destroyable' do
+      let(:resource) { question }
+      let(:other_user) { create(:user) }
+      let(:other_user_resource) { create(:question, user: other_user) }
+      let(:other_user_resource_api_path) { "/api/v1/questions/#{other_user_resource.id}" }
+      let(:successfully_destroyed_msg) { "Question was successfully deleted." }
     end
   end
 end
