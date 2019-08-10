@@ -42,51 +42,10 @@ describe 'Answers API', type: :request do
       let(:meth) { :post }
     end
 
-    context 'authorized' do
-      context 'with valid answer data' do
-        let(:answer_params) { attributes_for(:answer) }
-        let(:post_request) { post api_path,
-                                  params: { access_token: access_token.token,
-                                            question: question,
-                                            answer: answer_params },
-                                  headers: headers }
-
-        it 'returns 200 status' do
-          post_request
-
-          expect(response).to be_successful
-        end
-
-        it 'creates an answer' do
-          expect { post_request }.to change(question.answers, :count).by(1)
-        end
-
-        it 'returns new answer data' do
-          post_request
-
-          %w[body].each do |attr|
-            expect(json['answer'][attr]).to eq answer_params[attr.to_sym]
-          end
-        end
-      end
-
-      context 'with invalid answer data' do
-        let(:post_request) { post api_path,
-                                  params: { access_token: access_token.token,
-                                            question: question,
-                                            answer: attributes_for(:answer, :invalid) },
-                                  headers: headers }
-
-        it 'does not create a question' do
-          expect { post_request }.to_not change(question.answers, :count)
-        end
-
-        it 'returns error messages' do
-          post_request
-
-          expect(json['messages']).to include "Body is too short (minimum is 50 characters)"
-        end
-      end
+    it_behaves_like 'API_creatable' do
+      let(:resource) { :answer }
+      let(:countable) { question.answers }
+      let(:invalid_error_msg) { "Body is too short (minimum is 50 characters)" }
     end
   end
 

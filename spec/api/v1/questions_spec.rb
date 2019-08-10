@@ -131,49 +131,10 @@ describe 'Questions API', type: :request do
       let(:meth) { :post }
     end
 
-    context 'authorized' do
-      context 'with valid question data' do
-        let(:question_params) { attributes_for(:question) }
-        let(:post_request) { post api_path,
-                                  params: { access_token: access_token.token,
-                                            question: question_params },
-                                  headers: headers }
-
-        it 'returns 200 status' do
-          post_request
-
-          expect(response).to be_successful
-        end
-
-        it 'creates a question' do
-          expect { post_request }.to change(Question, :count).by(1)
-        end
-
-        it 'returns new question data' do
-          post_request
-
-          %w[title body].each do |attr|
-            expect(json['question'][attr]).to eq question_params[attr.to_sym]
-          end
-        end
-      end
-
-      context 'with invalid question data' do
-        let(:post_request) {  post  api_path,
-                                    params: { access_token: access_token.token,
-                                              question: attributes_for(:question, :invalid) },
-                                    headers: headers }
-
-        it 'does not create a question' do
-          expect { post_request }.to_not change(Question, :count)
-        end
-
-        it 'returns error messages' do
-          post_request
-
-          expect(json['messages']).to include "Title is too short (minimum is 15 characters)"
-        end
-      end
+    it_behaves_like 'API_creatable' do
+      let(:resource) { :question }
+      let(:countable) { Question }
+      let(:invalid_error_msg) { "Title is too short (minimum is 15 characters)" }
     end
   end
 
