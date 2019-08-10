@@ -6,6 +6,7 @@ describe 'Profile API', type: :request do
 
   describe 'GET /api/v1/profiles/me' do
     let(:api_path) { '/api/v1/profiles/me' }
+
     it_behaves_like 'API_authorable' do
       let(:meth) { 'get' }
     end
@@ -38,6 +39,7 @@ describe 'Profile API', type: :request do
 
   describe 'GET /api/v1/profiles' do
     let(:api_path) { '/api/v1/profiles' }
+
     it_behaves_like 'API_authorable' do
       let(:meth) { 'get' }
     end
