@@ -35,8 +35,12 @@ gem "omniauth"
 gem "omniauth-rails_csrf_protection"
 gem "omniauth-github"
 gem 'omniauth-vkontakte'
+gem 'doorkeeper'
 #Authorization
 gem 'cancancan'
+#Serializers
+gem 'active_model_serializers', '~> 0.10'
+gem 'oj'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'

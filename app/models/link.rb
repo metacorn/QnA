@@ -1,6 +1,8 @@
 class Link < ApplicationRecord
   belongs_to :linkable, polymorphic: true
 
+  default_scope { order(created_at: :asc) }
+
   validates :name, :url, presence: true
   validate :validate_url_format
 
