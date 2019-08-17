@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe 'Questions API', type: :request do
   let(:headers) { { "ACCEPT" => 'application/json' } }
+  let(:meth) { :get }
 
   describe 'GET /api/v1/questions' do
     let(:access_token) { create(:access_token) }
@@ -10,9 +11,7 @@ describe 'Questions API', type: :request do
     let!(:answers) { create_list(:answer, 4, question: questions.first, user: user) }
     let(:api_path) { '/api/v1/questions' }
 
-    it_behaves_like 'API_authorable' do
-      let(:meth) { :get }
-    end
+    it_behaves_like 'API_authorable'
 
     context 'authorized' do
       before do
@@ -57,9 +56,7 @@ describe 'Questions API', type: :request do
     let(:question) { create(:question, :with_attachments, user: user) }
     let(:api_path) { "/api/v1/questions/#{question.id}" }
 
-    it_behaves_like 'API_authorable' do
-      let(:meth) { :get }
-    end
+    it_behaves_like 'API_authorable'
 
     before do
       create(:link, :valid, linkable: question)
@@ -81,9 +78,7 @@ describe 'Questions API', type: :request do
     let(:answers_response) { json['answers'] }
     let(:api_path) { "/api/v1/questions/#{question.id}/answers" }
 
-    it_behaves_like 'API_authorable' do
-      let(:meth) { :get }
-    end
+    it_behaves_like 'API_authorable'
 
     context 'authorized' do
       before do

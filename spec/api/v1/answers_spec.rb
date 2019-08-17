@@ -9,10 +9,9 @@ describe 'Answers API', type: :request do
     let(:question) { create(:question, user: user) }
     let(:answer) { create(:answer, question: question, user: user) }
     let(:api_path) { "/api/v1/answers/#{answer.id}" }
+    let(:meth) { :get }
 
-    it_behaves_like 'API_authorable' do
-      let(:meth) { :get }
-    end
+    it_behaves_like 'API_authorable'
 
     before do
       create(:link, :valid, linkable: answer)

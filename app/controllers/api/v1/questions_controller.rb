@@ -22,8 +22,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   def update
     return head :forbidden unless current_user.owner?(@question)
-    @question.update(question_params)
-    if @question.save
+    if @question.update(question_params)
       render json: @question
     else
       render json: { messages: @question.errors.full_messages }

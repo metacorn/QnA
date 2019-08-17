@@ -27,13 +27,13 @@ RSpec.shared_examples_for "API_readable" do
     end
 
     it 'returns object files public fields' do
-      resource.files.size.times do |i|
-        %w[id created_at].each do |attr|
-          expect(resource_response['files'][i][attr]).to eq resource.files[i].send(attr).as_json
-        end
+      resource.files.each_with_index do |resource_file, index|
+        resource_response_file = resource_response['files'][index]
 
-        expect(resource_response['files'][i]['filename']).to eq resource.files[i].blob['filename']
-        expect(resource_response['files'][i]['url']).to eq Rails.application.routes.url_helpers.rails_blob_path(resource.files[i], only_path: true)
+        expect(resource_response_file['id']).to eq resource_file.id
+        expect(resource_response_file['created_at']).to eq resource_file.created_at.as_json
+        expect(resource_response_file['filename']).to eq resource_file.blob['filename']
+        expect(resource_response_file['url']).to eq Rails.application.routes.url_helpers.rails_blob_path(resource_file, only_path: true)
       end
     end
 
